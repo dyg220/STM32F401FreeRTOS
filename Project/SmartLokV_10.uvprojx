@@ -338,7 +338,7 @@
               <MiscControls></MiscControls>
               <Define>STM32F401xx,USE_STDPERIPH_DRIVER</Define>
               <Undefine></Undefine>
-              <IncludePath>../Cmsis;../Library/STM32F4xx_StdPeriph_Driver/inc;../User/inc</IncludePath>
+              <IncludePath>../Cmsis;../Library/STM32F4xx_StdPeriph_Driver/inc;../User/inc;../FreeRTOS/inc;../FreeRTOS/port/RVDS/ARM_CM4F</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -397,6 +397,11 @@
               <FileType>5</FileType>
               <FilePath>..\Cmsis\stm32f4xx.h</FilePath>
             </File>
+            <File>
+              <FileName>FreeRTOSConfig.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Cmsis\FreeRTOSConfig.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -406,6 +411,11 @@
               <FileName>main.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\User\src\main.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f4xx_it.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\User\src\stm32f4xx_it.c</FilePath>
             </File>
           </Files>
         </Group>

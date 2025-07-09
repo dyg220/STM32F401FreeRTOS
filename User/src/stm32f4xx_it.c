@@ -105,9 +105,9 @@ void UsageFault_Handler(void)
   * @param  None
   * @retval None
   */
-__weak void SVC_Handler(void)
-{
-}
+//__weak void SVC_Handler(void)
+//{
+//}
 
 /**
   * @brief  This function handles Debug Monitor exception.
@@ -123,36 +123,36 @@ void DebugMon_Handler(void)
   * @param  None
   * @retval None
   */
-__weak void PendSV_Handler(void)
-{
-}
+//__weak void PendSV_Handler(void)
+//{
+//}
 
 /**
   * @brief  This function handles SysTick Handler.
   * @param  None
   * @retval None
   */
-__weak void SysTick_Handler(void)
-{
-
-}
+//__weak void SysTick_Handler(void)
+//{
+//
+//}
 
 /**
   * @brief  This function handles EXTI 3 interrupt request.
   * @param  None
   * @retval None
   */
-__weak void EXTI9_5_IRQHandler(void)
-{
-}
+//__weak void EXTI9_5_IRQHandler(void)
+//{
+//}
 
 /**
   * @brief  This function handles EXTI 15-10 interrupt request.
   * @param  None
   * @retval None
   */
-__weak void EXTI15_10_IRQHandler(void)
-{
-}
+//__weak void EXTI15_10_IRQHandler(void)
+//{
+//}
 
 /******************* (C) COPYRIGHT 2011 STMicroelectronics *****END OF FILE****/

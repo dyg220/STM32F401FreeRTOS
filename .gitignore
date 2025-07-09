@@ -1,8 +1,7 @@
 /./vs
-/.vs/STM32F4
+/.vs/STM32F401FreeRTOS
 /obj
 /Project/DebugConfig
 /Project/Listings
 /Project/Objects
 
-/.vs/STM32F401FreeRTOS

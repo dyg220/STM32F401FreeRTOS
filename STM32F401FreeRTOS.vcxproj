@@ -83,7 +83,7 @@
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <NMakeIncludeSearchPath>D:\gcc-arm-none-eabi-10.3-2021.10\arm-none-eabi\include;.\Cmsis;.\Library\STM32F4xx_StdPeriph_Driver\inc;.\HardWear\inc;.\User\inc</NMakeIncludeSearchPath>
+    <NMakeIncludeSearchPath>D:\gcc-arm-none-eabi-10.3-2021.10\arm-none-eabi\include;.\Cmsis;.\Library\STM32F4xx_StdPeriph_Driver\inc;.\HardWear\inc;.\User\inc;.\FreeRTOS\inc</NMakeIncludeSearchPath>
     <NMakePreprocessorDefinitions>__arm__;__CC_ARM;__GNUC__;STM32F401xx;USE_STDPERIPH_DRIVER;$(NMakePreprocessorDefinitions)</NMakePreprocessorDefinitions>
   </PropertyGroup>
   <ItemGroup>
@@ -91,10 +91,36 @@
     <ClInclude Include="Cmsis\core_cmFunc.h" />
     <ClInclude Include="Cmsis\core_cmInstr.h" />
     <ClInclude Include="Cmsis\core_cmSimd.h" />
+    <ClInclude Include="Cmsis\FreeRTOSConfig.h" />
     <ClInclude Include="Cmsis\io_bit.h" />
     <ClInclude Include="Cmsis\stm32f4xx.h" />
     <ClInclude Include="Cmsis\stm32f4xx_conf.h" />
     <ClInclude Include="Cmsis\system_stm32f4xx.h" />
+    <ClInclude Include="FreeRTOS\inc\atomic.h" />
+    <ClInclude Include="FreeRTOS\inc\croutine.h" />
+    <ClInclude Include="FreeRTOS\inc\deprecated_definitions.h" />
+    <ClInclude Include="FreeRTOS\inc\event_groups.h" />
+    <ClInclude Include="FreeRTOS\inc\FreeRTOS.h" />
+    <ClInclude Include="FreeRTOS\inc\list.h" />
+    <ClInclude Include="FreeRTOS\inc\message_buffer.h" />
+    <ClInclude Include="FreeRTOS\inc\mpu_prototypes.h" />
+    <ClInclude Include="FreeRTOS\inc\mpu_wrappers.h" />
+    <ClInclude Include="FreeRTOS\inc\portable.h" />
+    <ClInclude Include="FreeRTOS\inc\projdefs.h" />
+    <ClInclude Include="FreeRTOS\inc\queue.h" />
+    <ClInclude Include="FreeRTOS\inc\semphr.h" />
+    <ClInclude Include="FreeRTOS\inc\StackMacros.h" />
+    <ClInclude Include="FreeRTOS\inc\stack_macros.h" />
+    <ClInclude Include="FreeRTOS\inc\stream_buffer.h" />
+    <ClInclude Include="FreeRTOS\inc\task.h" />
+    <ClInclude Include="FreeRTOS\inc\timers.h" />
+    <ClInclude Include="FreeRTOS\port\RVDS\ARM7_LPC21xx\portmacro.h" />
+    <ClInclude Include="FreeRTOS\port\RVDS\ARM_CA9\portmacro.h" />
+    <ClInclude Include="FreeRTOS\port\RVDS\ARM_CM0\portmacro.h" />
+    <ClInclude Include="FreeRTOS\port\RVDS\ARM_CM3\portmacro.h" />
+    <ClInclude Include="FreeRTOS\port\RVDS\ARM_CM4F\portmacro.h" />
+    <ClInclude Include="FreeRTOS\port\RVDS\ARM_CM4_MPU\portmacro.h" />
+    <ClInclude Include="FreeRTOS\port\RVDS\ARM_CM7\r0p1\portmacro.h" />
     <ClInclude Include="Library\STM32F4xx_StdPeriph_Driver\inc\misc.h" />
     <ClInclude Include="Library\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_adc.h" />
     <ClInclude Include="Library\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_can.h" />
@@ -134,9 +160,29 @@
     <ClInclude Include="Library\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_usart.h" />
     <ClInclude Include="Library\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_wwdg.h" />
     <ClInclude Include="User\inc\main.h" />
+    <ClInclude Include="User\src\stm32f4xx_it.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Cmsis\system_stm32f4xx.c" />
+    <ClCompile Include="FreeRTOS\port\MemMang\heap_1.c" />
+    <ClCompile Include="FreeRTOS\port\MemMang\heap_2.c" />
+    <ClCompile Include="FreeRTOS\port\MemMang\heap_3.c" />
+    <ClCompile Include="FreeRTOS\port\MemMang\heap_4.c" />
+    <ClCompile Include="FreeRTOS\port\MemMang\heap_5.c" />
+    <ClCompile Include="FreeRTOS\port\RVDS\ARM7_LPC21xx\port.c" />
+    <ClCompile Include="FreeRTOS\port\RVDS\ARM_CA9\port.c" />
+    <ClCompile Include="FreeRTOS\port\RVDS\ARM_CM0\port.c" />
+    <ClCompile Include="FreeRTOS\port\RVDS\ARM_CM3\port.c" />
+    <ClCompile Include="FreeRTOS\port\RVDS\ARM_CM4F\port.c" />
+    <ClCompile Include="FreeRTOS\port\RVDS\ARM_CM4_MPU\port.c" />
+    <ClCompile Include="FreeRTOS\port\RVDS\ARM_CM7\r0p1\port.c" />
+    <ClCompile Include="FreeRTOS\src\croutine.c" />
+    <ClCompile Include="FreeRTOS\src\event_groups.c" />
+    <ClCompile Include="FreeRTOS\src\list.c" />
+    <ClCompile Include="FreeRTOS\src\queue.c" />
+    <ClCompile Include="FreeRTOS\src\stream_buffer.c" />
+    <ClCompile Include="FreeRTOS\src\tasks.c" />
+    <ClCompile Include="FreeRTOS\src\timers.c" />
     <ClCompile Include="Library\STM32F4xx_StdPeriph_Driver\src\misc.c" />
     <ClCompile Include="Library\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_adc.c" />
     <ClCompile Include="Library\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_can.c" />
@@ -181,11 +227,18 @@
     <ClCompile Include="Library\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_usart.c" />
     <ClCompile Include="Library\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_wwdg.c" />
     <ClCompile Include="User\src\main.c" />
+    <ClCompile Include="User\src\stm32f4xx_it.c" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitignore" />
     <None Include="Cmsis\startup_stm32f40_41xxx.s" />
+    <None Include="FreeRTOS\port\MemMang\ReadMe.url" />
+    <None Include="FreeRTOS\port\RVDS\ARM7_LPC21xx\portmacro.inc" />
+    <None Include="FreeRTOS\port\RVDS\ARM_CA9\portmacro.inc" />
     <None Include="README.md" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="FreeRTOS\port\Keil\See-also-the-RVDS-directory.txt" />
   </ItemGroup>
   <ItemDefinitionGroup />
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

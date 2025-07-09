@@ -37,14 +37,13 @@ void USART1_IRQHandler(void)
 	if (USART_GetITStatus(USART1, USART_IT_RXNE) != RESET) // 检查接收中断
 	{
 		USART_ClearITPendingBit(USART1, USART_IT_RXNE); // 清除接收中断标志
-		u8 data = USART_ReceiveData(USART1); // 接收数据
-		USART_SendData(USART1, data); // 回显数据
+		u8 data = USART_ReceiveData(USART1);			// 接收数据
+		USART_SendData(USART1, data);					// 回显数据
 		while (USART_GetFlagStatus(USART1, USART_FLAG_TC) == RESET); // 等待发送完成
 	}
 	if (USART_GetITStatus(USART1, USART_IT_TXE) != RESET) // 检查发送中断
 	{
 		USART_ClearITPendingBit(USART1, USART_IT_TXE); // 清除发送中断标志
-
 	}
 
 }

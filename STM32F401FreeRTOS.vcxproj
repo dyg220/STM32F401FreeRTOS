@@ -161,6 +161,7 @@
     <ClInclude Include="Library\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_wwdg.h" />
     <ClInclude Include="User\inc\main.h" />
     <ClInclude Include="User\inc\stm32f4xx_it.h" />
+    <ClInclude Include="User\inc\usart1.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Cmsis\system_stm32f4xx.c" />
@@ -228,6 +229,7 @@
     <ClCompile Include="Library\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_wwdg.c" />
     <ClCompile Include="User\src\main.c" />
     <ClCompile Include="User\src\stm32f4xx_it.c" />
+    <ClCompile Include="User\src\usart1.c" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitignore" />

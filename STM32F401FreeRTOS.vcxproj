@@ -83,7 +83,7 @@
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <NMakeIncludeSearchPath>D:\gcc-arm-none-eabi-10.3-2021.10\arm-none-eabi\include;.\Cmsis;.\Library\STM32F4xx_StdPeriph_Driver\inc;.\HardWear\inc;.\User\inc;.\FreeRTOS\inc;.\FreeRTOS\port\RVDS\ARM_CM4F</NMakeIncludeSearchPath>
+    <NMakeIncludeSearchPath>D:\gcc-arm-none-eabi-10.3-2021.10\arm-none-eabi\include;.\Cmsis;.\Library\STM32F4xx_StdPeriph_Driver\inc;.\User\inc;.\FreeRTOS\inc;.\FreeRTOS\port\RVDS\ARM_CM4F;.\HardWear\LED;.\HardWear\KEY</NMakeIncludeSearchPath>
     <NMakePreprocessorDefinitions>__arm__;__CC_ARM;__GNUC__;STM32F401xx;USE_STDPERIPH_DRIVER;$(NMakePreprocessorDefinitions)</NMakePreprocessorDefinitions>
   </PropertyGroup>
   <ItemGroup>
@@ -121,6 +121,8 @@
     <ClInclude Include="FreeRTOS\port\RVDS\ARM_CM4F\portmacro.h" />
     <ClInclude Include="FreeRTOS\port\RVDS\ARM_CM4_MPU\portmacro.h" />
     <ClInclude Include="FreeRTOS\port\RVDS\ARM_CM7\r0p1\portmacro.h" />
+    <ClInclude Include="HardWear\KEY\key.h" />
+    <ClInclude Include="HardWear\LED\led.h" />
     <ClInclude Include="Library\STM32F4xx_StdPeriph_Driver\inc\misc.h" />
     <ClInclude Include="Library\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_adc.h" />
     <ClInclude Include="Library\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_can.h" />
@@ -186,6 +188,8 @@
     <ClCompile Include="FreeRTOS\src\stream_buffer.c" />
     <ClCompile Include="FreeRTOS\src\tasks.c" />
     <ClCompile Include="FreeRTOS\src\timers.c" />
+    <ClCompile Include="HardWear\KEY\key.c" />
+    <ClCompile Include="HardWear\LED\led.c" />
     <ClCompile Include="Library\STM32F4xx_StdPeriph_Driver\src\misc.c" />
     <ClCompile Include="Library\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_adc.c" />
     <ClCompile Include="Library\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_can.c" />

@@ -338,7 +338,7 @@
               <MiscControls></MiscControls>
               <Define>STM32F401xx,USE_STDPERIPH_DRIVER</Define>
               <Undefine></Undefine>
-              <IncludePath>../Cmsis;../Library/STM32F4xx_StdPeriph_Driver/inc;../User/inc;../FreeRTOS/inc;../FreeRTOS/port/RVDS/ARM_CM4F</IncludePath>
+              <IncludePath>../Cmsis;../Library/STM32F4xx_StdPeriph_Driver/inc;../User/inc;../FreeRTOS/inc;../FreeRTOS/port/RVDS/ARM_CM4F;../HardWear/LED;../HardWear/KEY</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -646,6 +646,18 @@
         </Group>
         <Group>
           <GroupName>HardWear</GroupName>
+          <Files>
+            <File>
+              <FileName>led.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\HardWear\LED\led.c</FilePath>
+            </File>
+            <File>
+              <FileName>key.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\HardWear\KEY\key.c</FilePath>
+            </File>
+          </Files>
         </Group>
         <Group>
           <GroupName>FreeRTOS/CORE</GroupName>

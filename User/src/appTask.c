@@ -53,6 +53,7 @@ void Task2(void* pvParameters)
 		}
 		if (key_num == 2)
 		{
+			printf("%#x\r\n", 0x00 + i);
 			Voice_SendCmd(0x00 + i);
 			i++;
 		}

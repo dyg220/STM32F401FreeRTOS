@@ -3,13 +3,12 @@
 int main()
 {
 
-	NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2); // 设置中断优先级分组
-	delay_init(84);
-	USART1_Config(115200);
+    NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2); // 设置中断优先级分组
+    delay_init(84);
+    USART1_Config(115200);
 
-	printf("Reset!\r\n");
-	AppStartTask();
+    printf("Reset!\r\n");
+    AppStartTask();
 
-
-	return 0;
+    return 0;
 }

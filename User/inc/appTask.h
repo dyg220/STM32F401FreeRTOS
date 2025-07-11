@@ -1,6 +1,7 @@
 #ifndef __APP_TASK_H__
 #define __APP_TASK_H__
 #include "stm32f4xx.h"                  // Device header
+#include <stdio.h>
 #include "FreeRTOS.h"
 #include "task.h"
 #include "queue.h"

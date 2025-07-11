@@ -7,6 +7,8 @@
 #include "queue.h"
 #include "systick.h"
 #include "led.h"
+#include "key.h"
+#include "dc_motor.h"
 
 void AppStartTask(void);
 

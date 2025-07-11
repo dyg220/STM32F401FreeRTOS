@@ -338,7 +338,7 @@
               <MiscControls></MiscControls>
               <Define>STM32F401xx,USE_STDPERIPH_DRIVER</Define>
               <Undefine></Undefine>
-              <IncludePath>../Cmsis;../Library/STM32F4xx_StdPeriph_Driver/inc;../User/inc;../FreeRTOS/inc;../FreeRTOS/port/RVDS/ARM_CM4F;../HardWear/LED;../HardWear/KEY</IncludePath>
+              <IncludePath>../Cmsis;../Library/STM32F4xx_StdPeriph_Driver/inc;../User/inc;../FreeRTOS/inc;../FreeRTOS/port/RVDS/ARM_CM4F;../HardWear/LED;../HardWear/KEY;../HardWear/DCMotor</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -656,6 +656,11 @@
               <FileName>key.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\HardWear\KEY\key.c</FilePath>
+            </File>
+            <File>
+              <FileName>dc_motor.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\HardWear\DCMotor\dc_motor.c</FilePath>
             </File>
           </Files>
         </Group>

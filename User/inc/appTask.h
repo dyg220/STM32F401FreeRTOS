@@ -9,6 +9,7 @@
 #include "led.h"
 #include "key.h"
 #include "door.h"
+#include "voice.h"
 
 void AppStartTask(void);
 

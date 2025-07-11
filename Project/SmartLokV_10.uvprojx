@@ -662,6 +662,11 @@
               <FileType>1</FileType>
               <FilePath>..\HardWear\led.c</FilePath>
             </File>
+            <File>
+              <FileName>voice.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\HardWear\voice.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

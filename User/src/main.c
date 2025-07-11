@@ -9,6 +9,7 @@ int main()
 	LED_Init();
 	Key_Init();
 	Door_Init();
+	Voice_Init();
 	AppStartTask();
 	return 0;
 }

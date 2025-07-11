@@ -5,7 +5,9 @@
 
 enum KEY {
 	key1_click = 1,
-	key1_long
+	key2_click,
+	key1_long,
+	key2_long
 };
 
 

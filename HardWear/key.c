@@ -39,6 +39,22 @@ u8 Key_Scan(void)
 				key_num = key1_long;
 		}
 	}
+	if (Key2_Press)
+	{
+		delay_ms(30);
+		if (Key2_Press)
+		{
+			while (Key2_Press)
+			{
+				time_cnt++;
+				delay_ms(1);
+			}
+			if (time_cnt < 500)
+				key_num = key2_click;
+			else
+				key_num = key2_long;
+		}
+	}
 	return key_num;
 }
 

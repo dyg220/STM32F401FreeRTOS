@@ -8,6 +8,7 @@ int main()
 	printf("Reset!\r\n");
 	LED_Init();
 	Key_Init();
-	//AppStartTask();
+	Door_Init();
+	AppStartTask();
 	return 0;
 }

@@ -11,12 +11,12 @@ QueueHandle_t queue;               // 队列句柄
 
 void AppStartTask(void)
 {
-	queue = xQueueCreate(64, sizeof(u8)); // 创建一个队列，长度为10，每个元素大小为uint8_t
+	queue = xQueueCreate(64, sizeof(u8));		//创建一个队列，长度为10，每个元素大小为uint8_t
 
 	taskENTER_CRITICAL();                                             // 进入临界区(关中断)
 	xTaskCreate(LED_Task, "LED_Task", 128, NULL, 3, &Task1_Handle_t); // 任务创建出来让任务到就绪态
 	xTaskCreate(Task2, "Task2", 128, NULL, 3, &Task2_Handle_t);       // 任务创建出来让任务到就绪态
-	xTaskCreate(Task3, "Task3", 128, NULL, 3, &Task3_Handle_t); //任务创建出来让任务到就绪态
+	xTaskCreate(Task3, "Task3", 128, NULL, 3, &Task3_Handle_t);		  //任务创建出来让任务到就绪态
 
 	taskEXIT_CRITICAL();   // 退出临界区
 	vTaskStartScheduler(); // 开启任务调度
@@ -38,7 +38,6 @@ void LED_Task(void* pvParameters)
 }
 void Task2(void* pvParameters)
 {
-	Door_Init();
 	u8 key_num = 0;
 	while (1)
 	{

@@ -8,7 +8,7 @@ int main()
 	printf("Reset!\r\n");
 	LED_Init();
 	Key_Init();
-	dcMotor_Config();
+	//dcMotor_Config();
 	AppStartTask();
 	return 0;
 }

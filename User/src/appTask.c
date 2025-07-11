@@ -24,30 +24,40 @@ void AppStartTask(void)
 
 void LED_Task(void* pvParameters)
 {
-	LED_Init();
 	while (1)
 	{
 		LED1_ON;
 		delay_ms(500);
 		LED1_OFF;
 		delay_ms(500);
+		LED2_ON;
+		delay_ms(500);
+		LED2_OFF;
+		delay_ms(500);
 	}
 }
 void Task2(void* pvParameters)
 {
-	Key_Init();
+	u8 key_num = 0;
 	while (1) {
+		key_num = Key_Scan();
+		if (key_num == key1_click)
+		{
+			printf("a------------------------\r\n");
+		}
+		if (key_num == key1_long)
+		{
+			printf("b-----------------\r\n");
+		}
 	}
 
 }
 void Task3(void* pvParameters)
 {
-
-	dcMotor_Config();
 	while (1) {
-		DCMotor_SetSpeed(0, 100);
+		DCMotor_SetSpeed(100);
 		delay_ms(300);
-		DCMotor_SetSpeed(0, 0);
+		DCMotor_SetSpeed(0);
 	}
 }
 

@@ -9,7 +9,8 @@ enum KEY {
 };
 
 
-#define Key1_Press !(GPIO_ReadInputDataBit(GPIOA, GPIO_Pin_0))
+#define Key1_Press  GPIO_ReadInputDataBit(GPIOA, GPIO_Pin_0)
+#define Key2_Press  !(GPIO_ReadInputDataBit(GPIOC, GPIO_Pin_13))
 
 #define Key_Mode     0  //1代表非阻塞   0代表有阻塞
 

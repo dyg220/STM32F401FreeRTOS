@@ -15,8 +15,8 @@ void AppStartTask(void)
 
 	taskENTER_CRITICAL();                                             // 进入临界区(关中断)
 	xTaskCreate(LED_Task, "LED_Task", 128, NULL, 3, &Task1_Handle_t); // 任务创建出来让任务到就绪态
-	xTaskCreate(Task2, "Task2", 128, NULL, 2, &Task2_Handle_t);       // 任务创建出来让任务到就绪态
-	// xTaskCreate(Task3, "Task3", 128, NULL, 3, &Task3_Handle_t); //任务创建出来让任务到就绪态
+	xTaskCreate(Task2, "Task2", 128, NULL, 3, &Task2_Handle_t);       // 任务创建出来让任务到就绪态
+	xTaskCreate(Task3, "Task3", 128, NULL, 3, &Task3_Handle_t); //任务创建出来让任务到就绪态
 
 	taskEXIT_CRITICAL();   // 退出临界区
 	vTaskStartScheduler(); // 开启任务调度
@@ -26,38 +26,39 @@ void LED_Task(void* pvParameters)
 {
 	while (1)
 	{
-		LED1_ON;
+		LEDB_ON;
 		delay_ms(500);
-		LED1_OFF;
+		LEDB_OFF;
 		delay_ms(500);
-		LED2_ON;
+		LEDR_ON;
 		delay_ms(500);
-		LED2_OFF;
+		LEDR_OFF;
 		delay_ms(500);
 	}
 }
 void Task2(void* pvParameters)
 {
+	Door_Init();
 	u8 key_num = 0;
 	while (1)
 	{
 		key_num = Key_Scan();
 		if (key_num == key1_click)
 		{
-			printf("a------------------------\r\n");
+			Door_Open();
 		}
 		if (key_num == key1_long)
 		{
-			printf("b-----------------\r\n");
+			Door_Close();
 		}
 	}
 }
 void Task3(void* pvParameters)
 {
+
 	while (1)
 	{
-		DCMotor_SetSpeed(100);
-		delay_ms(300);
-		DCMotor_SetSpeed(0);
+
+
 	}
 }

@@ -8,7 +8,7 @@
 #include "systick.h"
 #include "led.h"
 #include "key.h"
-#include "dc_motor.h"
+#include "door.h"
 
 void AppStartTask(void);
 

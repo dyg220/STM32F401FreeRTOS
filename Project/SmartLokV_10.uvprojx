@@ -338,7 +338,7 @@
               <MiscControls></MiscControls>
               <Define>STM32F401xx,USE_STDPERIPH_DRIVER</Define>
               <Undefine></Undefine>
-              <IncludePath>../Cmsis;../Library/STM32F4xx_StdPeriph_Driver/inc;../User/inc;../FreeRTOS/inc;../FreeRTOS/port/RVDS/ARM_CM4F;../HardWear/LED;../HardWear/KEY;../HardWear/DCMotor</IncludePath>
+              <IncludePath>../Cmsis;../Library/STM32F4xx_StdPeriph_Driver/inc;../User/inc;../FreeRTOS/inc;../FreeRTOS/port/RVDS/ARM_CM4F;../HardWear/</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -648,19 +648,19 @@
           <GroupName>HardWear</GroupName>
           <Files>
             <File>
-              <FileName>led.c</FileName>
+              <FileName>door.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\HardWear\LED\led.c</FilePath>
+              <FilePath>..\HardWear\door.c</FilePath>
             </File>
             <File>
               <FileName>key.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\HardWear\KEY\key.c</FilePath>
+              <FilePath>..\HardWear\key.c</FilePath>
             </File>
             <File>
-              <FileName>dc_motor.c</FileName>
+              <FileName>led.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\HardWear\DCMotor\dc_motor.c</FilePath>
+              <FilePath>..\HardWear\led.c</FilePath>
             </File>
           </Files>
         </Group>

@@ -10,6 +10,7 @@
 #include "key.h"
 #include "door.h"
 #include "voice.h"
+#include "mg200.h"
 
 void AppStartTask(void);
 

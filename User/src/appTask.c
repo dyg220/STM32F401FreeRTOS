@@ -1,5 +1,6 @@
 #include "appTask.h"
 #include <stddef.h>
+
 BaseType_t ret;
 TaskHandle_t Task1_Handle_t;       // 任务1句柄
 TaskHandle_t Task2_Handle_t;       // 任务2句柄
@@ -63,5 +64,9 @@ void Task3(void* pvParameters)
 {
 	while (1)
 	{
+		if (MG200_DETECT)
+		{
+			CaptureAndExtract(0x00);
+		}
 	}
 }

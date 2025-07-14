@@ -667,6 +667,11 @@
               <FileType>1</FileType>
               <FilePath>..\HardWear\voice.c</FilePath>
             </File>
+            <File>
+              <FileName>mg200.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\HardWear\mg200.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

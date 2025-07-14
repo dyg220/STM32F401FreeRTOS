@@ -64,9 +64,12 @@ void Task3(void* pvParameters)
 {
 	while (1)
 	{
-		if (MG200_DETECT)
+		u8 id = 0, ret = 0;
+		while (1)
 		{
-			CaptureAndExtract(0x00);
+			ret = Match1N(&id);
+			if (ret == 0)printf("%d\r\n", id);
+			delay_ms(500);
 		}
 	}
 }

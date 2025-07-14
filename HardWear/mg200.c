@@ -112,7 +112,7 @@ void MG200_Init(void)
 
 	USART6_Config(115200);
 
-	MG200_PWE_ON;
+	MG200_PWE_ON;//关闭低功耗
 }
 
 
@@ -202,6 +202,176 @@ u8 CaptureAndExtract(u8 parameter)
 	return Result;
 }
 
+
+
+/******************************************************
+*函 数 名：CaptureAndExtract
+*函数功能：指纹注册
+*参    数：ID 要注册进的ID号
+*返 回 值：0成功   0xff通信失败    其他错误
+*备    注：
+*******************************************************/
+u8 Enroll(u8 ID)
+{
+	u8 Result = 0, ACKparameter = 0;
+	printf("开始注册指纹！\r\n");
+	/*三次采集阶段*/
+go0:
+	printf("第一次采集，请将手指按下\r\n");
+	Voice_SendCmd(0x10);
+	while (MG200_DETECT == 0);			//等待按下
+	delay_ms(500);
+	if (CaptureAndExtract(0x00) != 0x00)	//提取特征量失败
+	{
+		printf("第一次采集失败，请重新按手指！\r\n"); printf("\r\n");
+		while (MG200_DETECT == 1);		//等待松开
+		goto go0;
+	}
+	printf("第一次采集成功，请松开手指\r\n"); printf("\r\n");
+	while (MG200_DETECT == 1);			//等待松开
+
+go1:
+	printf("第二次采集，请将手指按下\r\n");
+	Voice_SendCmd(0x10);
+	while (MG200_DETECT == 0);			//等待按下
+	delay_ms(500);
+	if (CaptureAndExtract(0x01) != 0x00)	//提取特征量失败
+	{
+		printf("第二次采集失败，请重新按手指！\r\n"); printf("\r\n");
+		while (MG200_DETECT == 1);		//等待松开
+		goto go1;
+	}
+	printf("第二次采集成功，请松开手指\r\n"); printf("\r\n");
+	while (MG200_DETECT == 1);			//等待松开
+
+go2:
+	printf("第三次采集，请将手指按下\r\n");
+	Voice_SendCmd(0x10);
+	while (MG200_DETECT == 0);			//等待按下
+	delay_ms(500);
+	if (CaptureAndExtract(0x02) != 0x00)	//提取特征量失败
+	{
+		printf("第三次采集失败，请重新按手指！\r\n"); printf("\r\n");
+		while (MG200_DETECT == 1);		//等待松开
+		goto go2;
+	}
+	printf("第三次采集成功，请松开手指\r\n"); printf("\r\n");
+	while (MG200_DETECT == 1);			//等待松开
+
+	/*注册阶段*/
+	delay_ms(200);
+	//注册的ID号（ID范围1~100，最大用户数为100，当该参数为00h时，模块注册的ID号是内部自动分配的）
+	MG200_Send_Cmd(0x7f, ID);
+
+	if (MG200_Read_Cmd(0x7f, &Result, &ACKparameter) == 0xff)	//接收返回的数据包错误
+	{
+		printf("通信失败\r\n");
+		return 0xff;
+	}
+	switch (Result)
+	{
+	case 0x00: printf("注册指纹成功！\r\n"); Voice_SendCmd(0x1c); break;
+	case 0x83: printf("ID 错误(ID < 0 或 ID > 最大用户数)或通信错误\r\n"); break;
+	case 0x91: printf("注册失败(用户区域已满)\r\n"); break;
+	case 0x93: printf("已经注册的 ID\r\n"); break;
+	case 0x94: printf("指纹提取次数 < 3\r\n"); break;
+	}
+	return Result;
+}
+
+
+/******************************************************
+*函 数 名：Match1N
+*函数功能：指纹对比
+*参    数：ID 对比出的ID号
+*返 回 值：0对比成功   0xff通信失败    其他错误
+*备    注：
+*******************************************************/
+u8 Match1N(u8* ID)
+{
+	u8 Result = 0xfe;
+	/*采集*/
+//	printf("请放下手指\r\n");
+	if (MG200_DETECT)
+	{
+		CaptureAndExtract(0x00); //采集
+
+		/*对比*/
+		MG200_Send_Cmd(0x71, 0x00);//发送对比指令
+		if (MG200_Read_Cmd(0x71, &Result, ID) != 0)//解析返回的数据包
+		{
+			printf("通信失败\r\n");
+			return 0xff;
+		}
+		if (Result == 0x00)
+		{
+			Voice_SendCmd(0x12);//播报"欢迎回家"
+			Door_Start(2000);
+			printf("对比成功\r\n");
+		}
+		else
+		{
+			Voice_SendCmd(0x13);//播报"开门失败"
+			printf("对比失败\r\n");
+		}
+	}
+	return Result;
+}
+
+
+/******************************************************
+*函 数 名：EraseOne
+*函数功能：删除某一个指纹
+*参    数：ID 删除的指纹ID
+*返 回 值：0 删除成功   0xff通信失败    其他错误
+*备    注：
+*******************************************************/
+u8 EraseOne(u8 ID)
+{
+	u8 Result = 0, parameter = 0;
+
+	MG200_Send_Cmd(0x73, ID);//发送删除指令
+
+	if (MG200_Read_Cmd(0x73, &Result, &parameter) != 0)//解析返回的数据包
+	{
+		printf("通信失败\r\n");
+		return 0xff;
+	}
+	switch (Result)
+	{
+	case 0X00: printf("删除成功！\r\n"); Voice_SendCmd(0x1c); break;
+	case 0X83: printf("参数错误(ID ≤ 0 或者 ID > 最大用户数)\r\n"); break;
+	case 0X90: printf("未注册的用户\r\n"); break;
+	case 0XFF: printf("写入 ROM 错误\r\n"); break;
+	}
+	return Result;
+}
+
+
+/******************************************************
+*函 数 名：EraseAll
+*函数功能：删除某一个指纹
+*参    数：None
+*返 回 值：0 删除成功   0xff通信失败    其他错误
+*备    注：
+*******************************************************/
+u8 EraseAll(void)
+{
+	u8 Result = 0, parameter = 0;
+	MG200_Send_Cmd(0x54, 0x00);//发送删除指令
+	if (MG200_Read_Cmd(0x54, &Result, &parameter) != 0)//解析返回的数据包
+	{
+		printf("通信失败\r\n");
+		return 0xff;
+	}
+	switch (Result)
+	{
+	case 0X00: printf("删除全部用户信息成功\r\n"); Voice_SendCmd(0x1c); break;
+	case 0X90: printf("删除失败(注册的用户数为 0 的时候)\r\n"); break;
+	default:   printf("删除失败\r\n"); break;
+	}
+	return Result;
+}
 
 
 

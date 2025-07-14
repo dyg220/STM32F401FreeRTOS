@@ -20,7 +20,10 @@ void MG200_Send_Cmd(u8 cmd, u8 parameter);
 u8 MG200_Read_Cmd(u8 cmd, u8* parameter, u8* result);
 
 u8 CaptureAndExtract(u8 parameter);//指纹采集
-
+u8 Enroll(u8 ID);//指纹注册
+u8 Match1N(u8* ID);//指纹对比
+u8 EraseOne(u8 ID);//删除单个指纹
+u8 EraseAll(void);//删除所有指纹
 
 #endif
 

@@ -67,7 +67,8 @@ void Task3(void* pvParameters)
 		u8 id = 0, ret = 0;
 		while (1)
 		{
-			ret = Match1N(&id);
+			ret = Enroll(&id);
+			//ret = Match1N(&id);
 			if (ret == 0)printf("%d\r\n", id);
 			delay_ms(500);
 		}

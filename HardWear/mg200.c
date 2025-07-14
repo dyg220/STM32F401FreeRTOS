@@ -58,16 +58,7 @@ u8 USART6_RecvByte(void)
 	return USART_ReceiveData(USART6);
 }
 
-#define Max_Size   256
-
-typedef struct {
-	u8 data[Max_Size];
-	u16 index;
-	u8 flag;
-}USART_INFO;
-
 USART_INFO MG200_Recv = { 0 };
-
 
 //中断服务函数
 void USART6_IRQHandler(void)
@@ -94,6 +85,36 @@ void USART6_IRQHandler(void)
 		MG200_Recv.index = 0;
 	}
 }
+/******************************************************
+*函 数 名：MG200_Init
+*函数功能：MG200指纹初始化
+*参    数：Baud
+*返 回 值：None
+*备    注：PWR---PC1      DETECT---PC0
+*******************************************************/
+void MG200_Init(void)
+{
+	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOC, ENABLE);
+
+	//电源引脚PC1
+	GPIO_InitTypeDef GPIO_InitStruct = { 0 };
+	GPIO_InitStruct.GPIO_Mode = GPIO_Mode_OUT;
+	GPIO_InitStruct.GPIO_OType = GPIO_OType_PP;
+	GPIO_InitStruct.GPIO_Pin = GPIO_Pin_1;
+	GPIO_InitStruct.GPIO_PuPd = GPIO_PuPd_NOPULL;
+	GPIO_InitStruct.GPIO_Speed = GPIO_Speed_2MHz;
+	GPIO_Init(GPIOC, &GPIO_InitStruct);
+
+	//触摸引脚PC0
+	GPIO_InitStruct.GPIO_Mode = GPIO_Mode_IN;
+	GPIO_InitStruct.GPIO_Pin = GPIO_Pin_0;
+	GPIO_Init(GPIOC, &GPIO_InitStruct);
+
+	USART6_Config(115200);
+
+	MG200_PWE_ON;
+}
+
 
 /******************************************************
 *函 数 名：MG200_Send_Cmd
@@ -104,9 +125,19 @@ void USART6_IRQHandler(void)
 *******************************************************/
 void MG200_Send_Cmd(u8 cmd, u8 parameter)
 {
-
-
+	u8 check_sum = 0;//校验和变量
+	USART6_SendByte(0x6c);//起始码
+	USART6_SendByte(0x63);//发送地址
+	USART6_SendByte(0x62);//接收地址
+	USART6_SendByte(cmd);//指令码
+	USART6_SendByte(parameter);//参数
+	USART6_SendByte(0x00);//预留
+	check_sum = (0x63 + 0x62 + cmd + parameter) & 0xff;
+	USART6_SendByte(check_sum);
+	//防止上电 会发送数据给MCU 意外导致标志位提前置1
+	MG200_Recv.flag = 0;
 }
+
 
 /******************************************************
 *函 数 名：MG200_Read_Cmd
@@ -119,5 +150,58 @@ void MG200_Send_Cmd(u8 cmd, u8 parameter)
 *******************************************************/
 u8 MG200_Read_Cmd(u8 cmd, u8* result, u8* parameter)
 {
+	u8 check_sum = 0;
+	while (!MG200_Recv.flag);//等待接收完成
+	MG200_Recv.flag = 0;
 
+	if (MG200_Recv.data[0] != 0x6c)	return 1;
+	if (MG200_Recv.data[1] != 0x62)	return 2;
+	if (MG200_Recv.data[2] != 0x63)	return 3;
+	if (MG200_Recv.data[3] != cmd)	return 4;
+
+	*result = MG200_Recv.data[4];//获取到执行效果数据
+	*parameter = MG200_Recv.data[5];//获取到返回的参数
+	//if(MG200_Recv.data[6] != 0x00)	return 5;//预留位，不一定是0x00
+
+	check_sum = (0x62 + 0x63 + cmd + *result + *parameter + MG200_Recv.data[6]) & 0xff;
+	if (MG200_Recv.data[7] != check_sum)	return 6;
+	return 0;
 }
+
+/******************************************************
+*函 数 名：CaptureAndExtract
+*函数功能：指纹采集
+*参    数：parameter 第几次采集
+*返 回 值：0成功   0xff通信失败  其他错误
+*备    注：
+*******************************************************/
+u8 CaptureAndExtract(u8 parameter)
+{
+	u8 Result, ACKparameter;
+	MG200_Send_Cmd(0x51, parameter);	// 发送提取特征量的数据包
+	if (MG200_Read_Cmd(0x51, &Result, &ACKparameter) != 0)	// 接收返回的数据包错误
+	{
+		printf("通信失败\r\n");
+		return 0xff;
+	}
+	switch (Result)
+	{
+	case 0x00: printf("抓取指纹图像及特征量提取成功！\r\n"); break;
+	case 0xb1: printf("指纹过小(small finger)！\r\n"); break;
+	case 0xb2: printf("无指纹(no finger)！\r\n"); break;
+	case 0xb3: printf("指纹位置过于靠左, 需要将手指靠右边摁按(left finger)！\r\n"); break;
+	case 0xb4: printf("指纹位置过于靠右, 需要将手指靠左边摁按(right finger)！\r\n"); break;
+	case 0xb5: printf("指纹位置过于靠上, 需要将手指靠下边摁按(up finger)！\r\n"); break;
+	case 0xb6: printf("指纹位置过于靠下, 需要将手指靠上边摁按(down finger)！\r\n"); break;
+	case 0xb7: printf("手指过湿(指纹表面出汗或者水渍过多)(wet finger)！\r\n"); break;
+	case 0xb8: printf("干燥手指(dry finger)！\r\n"); break;
+	case 0xc0: printf("特征提取错误！\r\n"); break;
+	case 0xc2: printf("特征提取错误(图像质量差)！\r\n"); break;
+	default:   printf("抓取指纹图像及特征量提取错误！\r\n"); break;
+	}
+	return Result;
+}
+
+
+
+

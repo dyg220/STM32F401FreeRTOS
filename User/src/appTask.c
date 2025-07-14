@@ -24,7 +24,6 @@ void AppStartTask(void)
 
 void LED_Task(void* pvParameters)
 {
-	printf("led---------\r\n");
 	while (1)
 	{
 		LEDB_ON;

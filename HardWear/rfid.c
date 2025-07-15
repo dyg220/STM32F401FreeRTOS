@@ -358,7 +358,7 @@ char PcdComMF522(u8 Command, u8* pIn, u8 InLenByte, u8* pOut, u8* pOutLenBit)
 	u8   waitFor = 0x00;
 	u8   lastBits;
 	u8   n;
-	u16   i;
+	u16  i;
 	switch (Command)
 	{
 	case PCD_AUTHENT:

@@ -169,6 +169,7 @@
     <ClInclude Include="Library\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_usart.h" />
     <ClInclude Include="Library\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_wwdg.h" />
     <ClInclude Include="User\inc\appTask.h" />
+    <ClInclude Include="User\inc\iic.h" />
     <ClInclude Include="User\inc\main.h" />
     <ClInclude Include="User\inc\spi.h" />
     <ClInclude Include="User\inc\stm32f4xx_it.h" />
@@ -249,6 +250,7 @@
     <ClCompile Include="Library\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_usart.c" />
     <ClCompile Include="Library\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_wwdg.c" />
     <ClCompile Include="User\src\appTask.c" />
+    <ClCompile Include="User\src\iic.c" />
     <ClCompile Include="User\src\main.c" />
     <ClCompile Include="User\src\spi.c" />
     <ClCompile Include="User\src\stm32f4xx_it.c" />

@@ -47,15 +47,13 @@ void USART6_Config(u32 Baud)
 
 void USART6_SendByte(u8 Byte)
 {
-	while (USART_GetFlagStatus(USART6, USART_FLAG_TXE) == 0)
-		;
+	while (USART_GetFlagStatus(USART6, USART_FLAG_TXE) == 0);
 	USART_SendData(USART6, Byte);
 }
 
 u8 USART6_RecvByte(void)
 {
-	while (USART_GetFlagStatus(USART6, USART_FLAG_RXNE) == 0)
-		;
+	while (USART_GetFlagStatus(USART6, USART_FLAG_RXNE) == 0);
 	return USART_ReceiveData(USART6);
 }
 

@@ -6,7 +6,7 @@ TaskHandle_t Task1_Handle_t;       // 任务1句柄
 TaskHandle_t Task2_Handle_t;       // 任务2句柄
 TaskHandle_t Task3_Handle_t;       // 任务2句柄
 
-void Task1(void* pvParameters); // 任务1函数
+void Task1(void* pvParameters); 	// 任务1函数
 void Task2(void* pvParameters);    // 任务1函数
 void Task3(void* pvParameters);    // 任务1函数
 
@@ -31,7 +31,6 @@ void Task1(void* pvParameters)
 	while (1)
 	{
 		PCD_distinguish_PICC(PCD_ID);
-
 	}
 }
 

@@ -126,8 +126,18 @@ void _ttywrch(int ch)
 //重定义fputc函数 
 int fputc(int ch, FILE* f)
 {
-	while (USART_GetFlagStatus(USART1, USART_FLAG_TC) == RESET);
-	USART_SendData(USART1, ch);
+	int USART_PRINTF_FLAG = 1;//默认串口1
+	if (USART_PRINTF_FLAG == 1)
+	{
+		while (USART_GetFlagStatus(USART1, USART_FLAG_TC) == RESET);
+		USART_SendData(USART1, ch);
+	}
+	else
+	{
+		while (USART_GetFlagStatus(USART2, USART_FLAG_TC) == RESET);
+		USART_SendData(USART2, (uint8_t)ch);
+	}
+
 	return ch;
 }
 

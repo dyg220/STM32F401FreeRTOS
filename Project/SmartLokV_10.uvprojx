@@ -432,6 +432,11 @@
               <FileType>1</FileType>
               <FilePath>..\User\src\systick.c</FilePath>
             </File>
+            <File>
+              <FileName>spi.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\User\src\spi.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -671,6 +676,11 @@
               <FileName>mg200.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\HardWear\mg200.c</FilePath>
+            </File>
+            <File>
+              <FileName>rfid.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\HardWear\rfid.c</FilePath>
             </File>
           </Files>
         </Group>

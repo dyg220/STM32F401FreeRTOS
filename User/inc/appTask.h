@@ -11,8 +11,9 @@
 #include "door.h"
 #include "voice.h"
 #include "mg200.h"
+#include "rfid.h"
 
 void AppStartTask(void);
 
-
 #endif
+

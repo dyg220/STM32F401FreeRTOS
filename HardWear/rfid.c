@@ -1,6 +1,6 @@
 #include "rfid.h"
 
-
+extern u8 RFID_ID1[4];
 /******************************************************
 *函 数 名：RFID_Init
 *函数功能：RFID初始化
@@ -27,6 +27,7 @@ void RFID_Init(void)
 	RFID_RST_H;
 
 	SPI3_Init();               //SPI初始化函数
+
 	PcdReset();                //软硬复位
 	PcdAntennaOff();		   //关闭天线
 	PcdAntennaOn();		       //开启天线	
@@ -73,6 +74,61 @@ u8 PCD_distinguish_PICC(u8* pSnr)
 	PcdHalt();
 	return MI_OK;
 }
+
+/******************************************************
+*函 数 名：RFID_Register
+*函数功能：卡片登记
+*参    数：存储ID的数组
+*返 回 值：None
+*备    注：
+*******************************************************/
+void RFID_Register(u8* ID)
+{
+	u8 PCD_ID[4] = { 0 };
+	//	Voice_SendCmd(0x1e);//播报"请放置卡片"
+	if (PCD_distinguish_PICC(PCD_ID) == MI_OK)
+	{
+		if (strcmp((char*)PCD_ID, (char*)ID) == 0)//如果是之前录入的卡片
+		{
+			Voice_SendCmd(0x0e);//播报"卡片重复"
+			printf("卡片重复\r\n");
+			return;
+		}
+		else//如果之前没有录入过
+		{
+			strcpy((char*)ID, (char*)PCD_ID);//如果不是重复卡，就存到全局数组里
+			Voice_SendCmd(0x1c);//播报"操作成功"
+			printf("登记成功\r\n");
+		}
+	}
+}
+
+/******************************************************
+*函 数 名：RFID_Open_Door
+*函数功能：卡片开门
+*参    数：None
+*返 回 值：None
+*备    注：
+*******************************************************/
+void RFID_Open_Door(void)
+{
+	u8 PCD_ID[4] = { 0 };
+	if (PCD_distinguish_PICC(PCD_ID) == MI_OK)
+	{
+		printf("PCD:%#x %#x %#x %#x\r\n", PCD_ID[0], PCD_ID[1], PCD_ID[2], PCD_ID[3]);
+		printf("ID1:%#x %#x %#x %#x\r\n", RFID_ID1[0], RFID_ID1[1], RFID_ID1[2], RFID_ID1[3]);
+		if (strncmp((char*)PCD_ID, (char*)RFID_ID1, 4) == 0)
+		{
+			Voice_SendCmd(0x12);//播报"欢迎回家"	
+			Door_Start(2000);
+		}
+		else
+		{
+			Voice_SendCmd(0x13);//播报"开门失败"
+		}
+	}
+}
+
 
 u8 picc_passward[6] = { 0xff,0xff,0xff,0xff,0xff,0xff };//卡密码-初始密码--空白卡
 
@@ -212,7 +268,7 @@ u8 ReadCardData(u8 addr, u8* data, u8* pSnr)
 
 
 
-/***********************************************************************************/
+/***************************************库函数********************************************/
 //读RC532寄存器
 //Address:寄存器地址
 u8 ReadRawRC(u8 Address)
@@ -358,7 +414,7 @@ char PcdComMF522(u8 Command, u8* pIn, u8 InLenByte, u8* pOut, u8* pOutLenBit)
 	u8   waitFor = 0x00;
 	u8   lastBits;
 	u8   n;
-	u16  i;
+	u16   i;
 	switch (Command)
 	{
 	case PCD_AUTHENT:

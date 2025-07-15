@@ -12,6 +12,8 @@ void Task3(void* pvParameters);    // 任务1函数
 
 QueueHandle_t queue;               // 队列句柄
 
+u8 RFID_ID1[4] = { 0 };
+
 void AppStartTask(void)
 {
 	queue = xQueueCreate(64, sizeof(u8)); // 创建一个队列，长度为10，每个元素大小为uint8_t
@@ -27,16 +29,16 @@ void AppStartTask(void)
 
 void Task1(void* pvParameters)
 {
-	u8 PCD_ID[4] = { 0 };
+	//u8 PCD_ID[4] = { 0 };
 	while (1)
 	{
-		PCD_distinguish_PICC(PCD_ID);
+		//PCD_distinguish_PICC(PCD_ID);
 	}
 }
 
 void Task2(void* pvParameters)
 {
-	u8 i = 0;
+	/*u8 i = 0;
 	u8 key_num = 0;
 	while (1)
 	{
@@ -54,6 +56,26 @@ void Task2(void* pvParameters)
 			printf("%#x\r\n", 0x00 + i);
 			Voice_SendCmd(0x00 + i);
 			i++;
+		}
+	}*/
+
+	u8 i = 0, keynum = 0;
+	while (1)
+	{
+		keynum = Key_Scan();
+		if (keynum == 2)
+		{
+			i++;
+			if (i > 2) i = 1;
+			printf("i = %d\r\n", i);
+		}
+		if (i == 1)
+		{
+			RFID_Register(RFID_ID1);//卡片注册
+		}
+		else if (i == 2)
+		{
+			RFID_Open_Door();//卡片开门
 		}
 	}
 }

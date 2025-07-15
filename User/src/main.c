@@ -10,9 +10,11 @@ int main()
 	Key_Init();
 	Door_Init();
 	MG200_Init();
-	RFID_Init();
 	Voice_Init();
 	Voice_SendCmd(0xef);
+	RFID_Init();
+
+
 	printf("Reset!\r\n");
 	AppStartTask();
 	return 0;

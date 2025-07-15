@@ -4,9 +4,10 @@
 #include "stm32f4xx.h"                  // Device header
 #include "spi.h"
 #include "systick.h"
-#include <stdio.h>
-#include <string.h>
+#include "stdio.h"
+#include "string.h"
 #include "voice.h"
+#include "door.h"
 
 //RC522命令字
 #define PCD_IDLE              0x00               //取消当前命令
@@ -129,19 +130,22 @@ char PcdReset(void);                 //复位函数
 void PcdAntennaOff(void);            //关闭天线
 void PcdAntennaOn(void);             //开启天线
 char M500PcdConfigISOType(u8 type);  //配置协议
-char PcdRequest(u8 req_code, u8* pTagType);  //寻卡
-char PcdAnticoll(u8* pSnr);                 //防冲撞
-char PcdSelect(u8* pSnr);                   //选卡
-char PcdAuthState(u8  auth_mode, u8 addr, u8* pKey, u8* pSnr);  //验证密码
-char PcdWrite(u8   addr, u8* p);                             //写数据函数
-char PcdRead(u8   addr, u8* p);                              //读数据
-char PcdHalt(void);                                         //睡眠
+char PcdRequest(u8 req_code,u8 *pTagType);  //寻卡
+char PcdAnticoll(u8 *pSnr);                 //防冲撞
+char PcdSelect(u8 *pSnr);                   //选卡
+char PcdAuthState(u8  auth_mode,u8 addr,u8 *pKey,u8 *pSnr);  //验证密码
+char PcdWrite(u8   addr,u8 *p );                             //写数据函数
+char PcdRead(u8   addr,u8 *p );                              //读数据
+char PcdHalt (void);                                         //睡眠
 /***************************************库函数******************************************/
 
 void RFID_Init(void);//RFID初始化
-u8 PCD_distinguish_PICC(u8* pSnr);//读卡ID
-u8 WriteCardData(u8 addr, u8* data, u8* pSnr);//向卡中写数据
-u8 ReadCardData(u8 addr, u8* data, u8* pSnr);//从卡中读数据
+u8 PCD_distinguish_PICC(u8 *pSnr);//读卡ID
+u8 WriteCardData(u8 addr,u8 *data,u8 *pSnr);//向卡中写数据
+u8 ReadCardData(u8 addr,u8 *data,u8 *pSnr);//从卡中读数据
+
+void RFID_Register(u8 *ID);
+void RFID_Open_Door(void);
 
 #endif
 

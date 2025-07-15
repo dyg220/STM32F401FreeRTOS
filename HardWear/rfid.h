@@ -108,43 +108,43 @@
 #define     RFU3F		  		  0x3F
 
 //和MF522通讯时返回的错误代码 
-#define	  MI_OK             0
-#define	  MI_NOTAGERR      (1)
-#define   MI_ERR           (2)
+#define	  MI_OK				 0
+#define	  MI_NOTAGERR		(1)
+#define   MI_ERR			(2)
 
-#define	  SHAQU1		0X01
-#define	  KUAI4			0X04
-#define	  KUAI7			0X07
-#define	  REGCARD		0XA1
-#define	  CONSUME		0XA2
-#define   READCARD		0XA3
-#define   ADDMONEY		0XA4
+#define	  SHAQU1			0X01
+#define	  KUAI4				0X04
+#define	  KUAI7				0X07
+#define	  REGCARD			0XA1
+#define	  CONSUME			0XA2
+#define   READCARD			0XA3
+#define   ADDMONEY			0XA4
 
-#define RFID_CS_H 		GPIO_WriteBit(GPIOA, GPIO_Pin_15, Bit_SET)
-#define RFID_CS_L  		GPIO_WriteBit(GPIOA, GPIO_Pin_15, Bit_RESET)
-#define RFID_RST_H 		GPIO_WriteBit(GPIOD, GPIO_Pin_2, Bit_SET)
-#define RFID_RST_L 		GPIO_WriteBit(GPIOD, GPIO_Pin_2, Bit_RESET)
+#define	  RFID_CS_H 		GPIO_WriteBit(GPIOA, GPIO_Pin_15, Bit_SET)
+#define   RFID_CS_L  		GPIO_WriteBit(GPIOA, GPIO_Pin_15, Bit_RESET)
+#define   RFID_RST_H 		GPIO_WriteBit(GPIOD, GPIO_Pin_2, Bit_SET)
+#define   RFID_RST_L 		GPIO_WriteBit(GPIOD, GPIO_Pin_2, Bit_RESET)
 
 /***************************************库函数******************************************/
 char PcdReset(void);                 //复位函数
 void PcdAntennaOff(void);            //关闭天线
 void PcdAntennaOn(void);             //开启天线
 char M500PcdConfigISOType(u8 type);  //配置协议
-char PcdRequest(u8 req_code,u8 *pTagType);  //寻卡
-char PcdAnticoll(u8 *pSnr);                 //防冲撞
-char PcdSelect(u8 *pSnr);                   //选卡
-char PcdAuthState(u8  auth_mode,u8 addr,u8 *pKey,u8 *pSnr);  //验证密码
-char PcdWrite(u8   addr,u8 *p );                             //写数据函数
-char PcdRead(u8   addr,u8 *p );                              //读数据
-char PcdHalt (void);                                         //睡眠
+char PcdRequest(u8 req_code, u8* pTagType);  //寻卡
+char PcdAnticoll(u8* pSnr);                 //防冲撞
+char PcdSelect(u8* pSnr);                   //选卡
+char PcdAuthState(u8  auth_mode, u8 addr, u8* pKey, u8* pSnr);  //验证密码
+char PcdWrite(u8   addr, u8* p);                             //写数据函数
+char PcdRead(u8   addr, u8* p);                              //读数据
+char PcdHalt(void);                                         //睡眠
 /***************************************库函数******************************************/
 
 void RFID_Init(void);//RFID初始化
-u8 PCD_distinguish_PICC(u8 *pSnr);//读卡ID
-u8 WriteCardData(u8 addr,u8 *data,u8 *pSnr);//向卡中写数据
-u8 ReadCardData(u8 addr,u8 *data,u8 *pSnr);//从卡中读数据
+u8 PCD_distinguish_PICC(u8* pSnr);//读卡ID
+u8 WriteCardData(u8 addr, u8* data, u8* pSnr);//向卡中写数据
+u8 ReadCardData(u8 addr, u8* data, u8* pSnr);//从卡中读数据
 
-void RFID_Register(u8 *ID);
+void RFID_Register(u8* ID);
 void RFID_Open_Door(void);
 
 #endif

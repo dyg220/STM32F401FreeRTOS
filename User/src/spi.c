@@ -30,7 +30,7 @@ void SPI3_Init(void)
 
 	//4、初始化SPI
 	SPI_InitTypeDef SPI_InitStruct = { 0 };
-	SPI_InitStruct.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_4;	//波特率分频
+	SPI_InitStruct.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_4;		//波特率分频
 	SPI_InitStruct.SPI_CPHA = SPI_CPHA_1Edge;           				//时钟相位
 	SPI_InitStruct.SPI_CPOL = SPI_CPOL_Low;             				//时钟极性
 	SPI_InitStruct.SPI_DataSize = SPI_DataSize_8b;					 	//数据大小

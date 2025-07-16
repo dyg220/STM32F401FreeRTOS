@@ -437,6 +437,11 @@
               <FileType>1</FileType>
               <FilePath>..\User\src\spi.c</FilePath>
             </File>
+            <File>
+              <FileName>iic.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\User\src\iic.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -681,6 +686,16 @@
               <FileName>rfid.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\HardWear\rfid.c</FilePath>
+            </File>
+            <File>
+              <FileName>at24c02.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\HardWear\at24c02.c</FilePath>
+            </File>
+            <File>
+              <FileName>cy8cmbr3116.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\HardWear\cy8cmbr3116.c</FilePath>
             </File>
           </Files>
         </Group>

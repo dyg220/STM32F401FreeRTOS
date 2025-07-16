@@ -1,19 +1,29 @@
 #include "main.h"
 
-int main()
+
+int main(void)
 {
-	NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2); // 设置中断优先级分组
+	NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2);
 	delay_init(84);
-	USART1_Config(115200);
 	LED_Init();
 	Key_Init();
 	Door_Init();
+	USART1_Config(115200);
 	MG200_Init();
+	RFID_Init();
+	AT24C02_Init();
+	CY8CMBR3116_Init();
 	Voice_Init();
 	Voice_SendCmd(0xef);
-	RFID_Init();
 
 	printf("Reset!\r\n");
-	AppStartTask();
+
+	AppStartTask();//任务
+
 	return 0;
 }
+
+
+
+
+

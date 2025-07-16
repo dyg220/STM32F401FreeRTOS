@@ -85,7 +85,7 @@ u8 PCD_distinguish_PICC(u8* pSnr)
 void RFID_Register(u8* ID)
 {
 	u8 PCD_ID[4] = { 0 };
-	//	Voice_SendCmd(0x1e);//播报"请放置卡片"
+	//Voice_SendCmd(0x1e);//播报"请放置卡片"
 	if (PCD_distinguish_PICC(PCD_ID) == MI_OK)
 	{
 		if (strcmp((char*)PCD_ID, (char*)ID) == 0)//如果是之前录入的卡片

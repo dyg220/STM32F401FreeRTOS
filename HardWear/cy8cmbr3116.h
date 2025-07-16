@@ -3,7 +3,8 @@
 
 #include "stm32f4xx.h"                  // Device header
 #include "iic.h"
-#include "stdio.h"
+#include <stdio.h>
+#include <string.h>
 #include "voice.h"
 
 typedef struct{

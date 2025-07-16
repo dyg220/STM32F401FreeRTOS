@@ -289,7 +289,6 @@ u8 CY8CMBR3116_Read_Key(void)
 	if (ack)printf("键值读取失败\r\n");
 
 	key_temp = (key_val[1] << 8) | key_val[0];//合成寄存器原始数据（因为寄存器是低字节优先）
-
 	switch (key_temp)
 	{
 	case 0x0008: return '1';

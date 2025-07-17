@@ -7,7 +7,7 @@
 #include <string.h>
 #include "voice.h"
 
-typedef struct{
+typedef struct {
 	u8 password[10];//输入缓冲区
 	u8 index;//输入位置
 }CY_INFO;

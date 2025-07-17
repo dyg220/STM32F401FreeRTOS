@@ -16,6 +16,7 @@
 #include "rfid.h"
 #include "at24c02.h"
 #include "cy8cmbr3116.h"
+#include "lcd.h"
 
 
 #endif

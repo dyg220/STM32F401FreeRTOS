@@ -40,14 +40,9 @@ void AppStartTask(void)
 //ÈÎÎñº¯Êý1
 void Task1(void* pvParameters)
 {
-	u8 key = 0;
 	while (1)
 	{
-		key = CY8CMBR3116_Key_Scan();
-		if (key != 0xff)
-		{
-			printf("Key£º%c\r\n", key);
-		}
+		CY8CMBR3116_Open_Door();
 	}
 }
 

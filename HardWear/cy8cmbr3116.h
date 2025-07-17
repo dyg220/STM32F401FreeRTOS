@@ -3,11 +3,12 @@
 
 #include "stm32f4xx.h"                  // Device header
 #include "iic.h"
-#include <stdio.h>
-#include <string.h>
+#include "stdio.h"
 #include "voice.h"
+#include "string.h"
+#include "door.h"
 
-typedef struct {
+typedef struct{
 	u8 password[10];//输入缓冲区
 	u8 index;//输入位置
 }CY_INFO;
@@ -30,6 +31,7 @@ u8 CY8CMBR3116_regcfg(u8 dfg_flag);
 void CY8CMBR3116_Init(void);
 u8 CY8CMBR3116_Read_Key(void);
 u8 CY8CMBR3116_Key_Scan(void);
+void CY8CMBR3116_Open_Door(void);
 
 #endif
 

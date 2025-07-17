@@ -10,24 +10,24 @@ extern u8 RFID_ID1[4];
 *******************************************************/
 void RFID_Init(void)
 {
-	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOA | RCC_AHB1Periph_GPIOD, ENABLE);
-
-	GPIO_InitTypeDef GPIO_InitStruct = { 0 };
+	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOA | RCC_AHB1Periph_GPIOD, ENABLE);	
+	
+	GPIO_InitTypeDef GPIO_InitStruct = {0};
 	GPIO_InitStruct.GPIO_Mode = GPIO_Mode_OUT;
 	GPIO_InitStruct.GPIO_OType = GPIO_OType_PP;
-	GPIO_InitStruct.GPIO_Pin = GPIO_Pin_2;
+	GPIO_InitStruct.GPIO_Pin  = GPIO_Pin_2;
 	GPIO_InitStruct.GPIO_PuPd = GPIO_PuPd_NOPULL;
-	GPIO_InitStruct.GPIO_Speed = GPIO_Low_Speed;
+	GPIO_InitStruct.GPIO_Speed = GPIO_Low_Speed; 
 	GPIO_Init(GPIOD, &GPIO_InitStruct);
 
 	GPIO_InitStruct.GPIO_Pin = GPIO_Pin_15;
 	GPIO_Init(GPIOA, &GPIO_InitStruct);
-
+	
 	RFID_CS_H;
 	RFID_RST_H;
-
+	
 	SPI3_Init();               //SPI³õÊ¼»¯º¯Êý
-
+	
 	PcdReset();                //ÈíÓ²¸´Î»
 	PcdAntennaOff();		   //¹Ø±ÕÌìÏß
 	PcdAntennaOn();		       //¿ªÆôÌìÏß	
@@ -38,7 +38,7 @@ void RFID_Init(void)
 *º¯ Êý Ãû£ºPCD_distinguish_PICC
 *º¯Êý¹¦ÄÜ£ºPCDÊ¶±ðtypeAÀà¿¨
 *²Î    Êý£ºu8 *pSnr      Ê¶±ðµ½µÄ4×Ö½ÚµÄIDºÅ
-*·µ »Ø Öµ£º·µ»ØÖµ½×¶Î´íÎó
+*·µ »Ø Öµ£º·µ»ØÖµ½×¶Î´íÎó				
 *±¸    ×¢£º	pTagType[OUT]:¿¨Æ¬ÀàÐÍ´úÂë(×öÊä³ö²ÎÊý)
 			0x4400=  Mifare_UltraLight
 			0x0400 = Mifare One (S50)
@@ -46,30 +46,30 @@ void RFID_Init(void)
 			0x0800 = Mifare Pro(X)
 			0x4403 = Mifare_DESFire
 *******************************************************/
-u8 PCD_distinguish_PICC(u8* pSnr)
+u8 PCD_distinguish_PICC(u8 *pSnr)
 {
-	uint8_t pTagType[2] = { 0 }; //´æ¿¨µÄÀàÐÍÊý×é
+	uint8_t pTagType[2] = {0}; //´æ¿¨µÄÀàÐÍÊý×é
 	//1.Ñ°¿¨
-	if (PcdRequest(PICC_REQIDL, pTagType) != MI_OK)
+	if(PcdRequest(PICC_REQIDL,pTagType)!=MI_OK)
 	{
-		return 1;
+		 return 1;
 	}
 	//2.·À³åÍ»
-	if (PcdAnticoll(pSnr) != MI_OK)
+	if(PcdAnticoll(pSnr)!=MI_OK)
 	{
 		printf("·À³åÍ»Ê§°Ü\r\n");
 		return 2;
 	}
 	//3.Ñ¡¿¨
-	if (PcdSelect(pSnr) != MI_OK)
+	if(PcdSelect(pSnr)!=MI_OK)
 	{
 		printf("Ñ¡¿¨Ê§°Ü\r\n");
 		return 3;
 	}
 	Voice_SendCmd(0x2e);//ÓïÒô²¥±¨"àÖ"
-	printf("¿¨ÀàÐÍ:0x%02x%02x\r\n", pTagType[0], pTagType[1]);
-	printf("¿¨ºÅ:%#x %#x %#x %#x\r\n", pSnr[0], pSnr[1], pSnr[2], pSnr[3]);
-
+	printf("¿¨ÀàÐÍ:0x%02x%02x\r\n",pTagType[0],pTagType[1]);
+	printf("¿¨ºÅ:%#x %#x %#x %#x\r\n",pSnr[0],pSnr[1],pSnr[2],pSnr[3]);
+	
 	//Ë¯Ãß
 	PcdHalt();
 	return MI_OK;
@@ -82,24 +82,24 @@ u8 PCD_distinguish_PICC(u8* pSnr)
 *·µ »Ø Öµ£ºNone
 *±¸    ×¢£º
 *******************************************************/
-void RFID_Register(u8* ID)
+void RFID_Register(u8 *ID)
 {
-	u8 PCD_ID[4] = { 0 };
-	//Voice_SendCmd(0x1e);//²¥±¨"Çë·ÅÖÃ¿¨Æ¬"
-	if (PCD_distinguish_PICC(PCD_ID) == MI_OK)
+	u8 PCD_ID[4]={0}; 
+//	Voice_SendCmd(0x1e);//²¥±¨"Çë·ÅÖÃ¿¨Æ¬"
+	if(PCD_distinguish_PICC(PCD_ID)==MI_OK)
 	{
-		if (strcmp((char*)PCD_ID, (char*)ID) == 0)//Èç¹ûÊÇÖ®Ç°Â¼ÈëµÄ¿¨Æ¬
+		if(strcmp((char*)PCD_ID,(char*)ID)==0)//Èç¹ûÊÇÖ®Ç°Â¼ÈëµÄ¿¨Æ¬
 		{
 			Voice_SendCmd(0x0e);//²¥±¨"¿¨Æ¬ÖØ¸´"
 			printf("¿¨Æ¬ÖØ¸´\r\n");
-			return;
+			return ;
 		}
 		else//Èç¹ûÖ®Ç°Ã»ÓÐÂ¼Èë¹ý
 		{
-			strcpy((char*)ID, (char*)PCD_ID);//Èç¹û²»ÊÇÖØ¸´¿¨£¬¾Í´æµ½È«¾ÖÊý×éÀï
+			strcpy((char*)ID,(char*)PCD_ID);//Èç¹û²»ÊÇÖØ¸´¿¨£¬¾Í´æµ½È«¾ÖÊý×éÀï
 			Voice_SendCmd(0x1c);//²¥±¨"²Ù×÷³É¹¦"
 			printf("µÇ¼Ç³É¹¦\r\n");
-		}
+		}	
 	}
 }
 
@@ -112,12 +112,10 @@ void RFID_Register(u8* ID)
 *******************************************************/
 void RFID_Open_Door(void)
 {
-	u8 PCD_ID[4] = { 0 };
-	if (PCD_distinguish_PICC(PCD_ID) == MI_OK)
+	u8 PCD_ID[4]={0};
+	if(PCD_distinguish_PICC(PCD_ID) == MI_OK)
 	{
-		printf("PCD:%#x %#x %#x %#x\r\n", PCD_ID[0], PCD_ID[1], PCD_ID[2], PCD_ID[3]);
-		printf("ID1:%#x %#x %#x %#x\r\n", RFID_ID1[0], RFID_ID1[1], RFID_ID1[2], RFID_ID1[3]);
-		if (strncmp((char*)PCD_ID, (char*)RFID_ID1, 4) == 0)
+		if(strncmp((char*)PCD_ID,(char*)RFID_ID1,4)==0)
 		{
 			Voice_SendCmd(0x12);//²¥±¨"»¶Ó­»Ø¼Ò"	
 			Door_Start(2000);
@@ -130,7 +128,55 @@ void RFID_Open_Door(void)
 }
 
 
-u8 picc_passward[6] = { 0xff,0xff,0xff,0xff,0xff,0xff };//¿¨ÃÜÂë-³õÊ¼ÃÜÂë--¿Õ°×¿¨
+u8 picc_passward[6] = {0xff,0xff,0xff,0xff,0xff,0xff};//¿¨ÃÜÂë-³õÊ¼ÃÜÂë--¿Õ°×¿¨
+
+/******************************************************
+*º¯ Êý Ãû£ºWriteCardData
+*º¯Êý¹¦ÄÜ£ºÍù¿¨Æ¬µÄÄ³¿éµØÖ·Ð´Êý¾Ý
+*²Î    Êý£ºu8 addr,u8 *data,u8 *pSnr
+*·µ »Ø Öµ£º0³É¹¦ ÆäËûÊ§°Ü
+*±¸    ×¢£º¿éµÄ¾ø¶ÔµØÖ·0~63 ×¢Òâ²»Ð´µ½¿ØÖÆ¿éÖÐ
+           ÒªÐ´µÄÊý¾ÝÎª16×Ö½Ú
+*******************************************************/
+u8 WriteCardData(u8 addr,u8 *data,u8 *pSnr)
+{
+	uint8_t pTagType[2] = {0}; //´æ¿¨µÄÀàÐÍÊý×é
+	//1.Ñ°¿¨
+	if(PcdRequest(PICC_REQIDL,pTagType)!=MI_OK)
+	{
+		 return 1;
+	}
+	//2.·À³åÍ»
+	if(PcdAnticoll(pSnr)!=MI_OK)
+	{
+		return 2;
+	}
+	//3.Ñ¡¿¨
+	if(PcdSelect(pSnr)!=MI_OK)
+	{
+		return 3;
+	}
+	Voice_SendCmd(0x2e);//ÓïÒô²¥±¨"àÖ"
+	//4.ÃÜÂëÑéÖ¤
+	if(PcdAuthState(PICC_AUTHENT1A,(addr/4)*4+3,picc_passward,pSnr)!=MI_OK)
+	{
+		printf("±È¶ÔÃÜÂëÊ§°Ü\r\n");
+		PcdHalt();//ÐÝÃß
+		return 4;
+	}
+	//5.Ð´Êý¾Ý
+	if(PcdWrite(addr,data)!=MI_OK)
+	{
+		printf("Ð´Êý¾ÝÊ§°Ü\r\n");
+		PcdHalt();//ÐÝÃß
+		return 5;
+	}
+	PcdHalt();//ÐÝÃß
+	printf("Êý¾ÝÐ´Èë³É¹¦\r\n");
+	
+	return MI_OK;
+}
+
 
 ///******************************************************
 //*º¯ Êý Ãû£ºWriteCardData
@@ -142,77 +188,29 @@ u8 picc_passward[6] = { 0xff,0xff,0xff,0xff,0xff,0xff };//¿¨ÃÜÂë-³õÊ¼ÃÜÂë--¿Õ°×¿
 //*******************************************************/
 //u8 WriteCardData(u8 addr,u8 *data,u8 *pSnr)
 //{
-//	uint8_t pTagType[2] = {0}; //´æ¿¨µÄÀàÐÍÊý×é
-//	//1.Ñ°¿¨
-//	if(PcdRequest(PICC_REQIDL,pTagType)!=MI_OK)
+//	//1.Ñ¡¿¨
+//	if(PCD_distinguish_PICC(pSnr)!=MI_OK)//Ñ¡¿¨
 //	{
-//		 return 1;
+//		return MI_ERR;
 //	}
-//	//2.·À³åÍ»
-//	if(PcdAnticoll(pSnr)!=MI_OK)
-//	{
-//		return 2;
-//	}
-//	//3.Ñ¡¿¨
-//	if(PcdSelect(pSnr)!=MI_OK)
-//	{
-//		return 3;
-//	}
-//	Voice_SendCmd(0x2e);//ÓïÒô²¥±¨"àÖ"
 //	//4.ÃÜÂëÑéÖ¤
-//	if(PcdAuthState(PICC_AUTHENT1A,(addr/4)*4+3,picc_passward,pSnr)!=MI_OK)
+//	if(PcdAuthState(PICC_AUTHENT1A,(addr/4)*4+3,picc_passward,pSnr)!=MI_OK)//ÑéÖ¤ÃÜÂë
 //	{
 //		printf("±È¶ÔÃÜÂëÊ§°Ü\r\n");
-//		PcdHalt();//ÐÝÃß
-//		return 4;
+//		return MI_ERR;
 //	}
 //	//5.Ð´Êý¾Ý
-//	if(PcdWrite(addr,data)!=MI_OK)
+//	if(PcdWrite(addr,data)!=MI_OK)//Ð´Êý¾Ý
 //	{
 //		printf("Ð´Êý¾ÝÊ§°Ü\r\n");
-//		PcdHalt();//ÐÝÃß
-//		return 5;
+//		return MI_ERR;
 //	}
 //	PcdHalt();//ÐÝÃß
-//	printf("Êý¾ÝÐ´Èë³É¹¦\r\n");
+//	printf("Ð´Èë³É¹¦\r\n");
 //	
 //	return MI_OK;
+
 //}
-
-
-/******************************************************
-*º¯ Êý Ãû£ºWriteCardData
-*º¯Êý¹¦ÄÜ£ºÍù¿¨Æ¬µÄÄ³¿éµØÖ·Ð´Êý¾Ý
-*²Î    Êý£ºu8 addr,u8 *data,u8 *pSnr
-*·µ »Ø Öµ£º0³É¹¦ ÆäËûÊ§°Ü
-*±¸    ×¢£º¿éµÄ¾ø¶ÔµØÖ·0~63 ×¢Òâ²»Ð´µ½¿ØÖÆ¿éÖÐ
-		   ÒªÐ´µÄÊý¾ÝÎª16×Ö½Ú
-*******************************************************/
-u8 WriteCardData(u8 addr, u8* data, u8* pSnr)
-{
-	//1.Ñ¡¿¨
-	if (PCD_distinguish_PICC(pSnr) != MI_OK)//Ñ¡¿¨
-	{
-		return MI_ERR;
-	}
-	//4.ÃÜÂëÑéÖ¤
-	if (PcdAuthState(PICC_AUTHENT1A, (addr / 4) * 4 + 3, picc_passward, pSnr) != MI_OK)//ÑéÖ¤ÃÜÂë
-	{
-		printf("±È¶ÔÃÜÂëÊ§°Ü\r\n");
-		return MI_ERR;
-	}
-	//5.Ð´Êý¾Ý
-	if (PcdWrite(addr, data) != MI_OK)//Ð´Êý¾Ý
-	{
-		printf("Ð´Êý¾ÝÊ§°Ü\r\n");
-		return MI_ERR;
-	}
-	PcdHalt();//ÐÝÃß
-	printf("Ð´Èë³É¹¦\r\n");
-
-	return MI_OK;
-
-}
 
 /******************************************************
 *º¯ Êý Ãû£ºReadCardData
@@ -221,34 +219,34 @@ u8 WriteCardData(u8 addr, u8* data, u8* pSnr)
 *·µ »Ø Öµ£º0³É¹¦ ÆäËûÊ§°Ü
 *±¸    ×¢£º
 *******************************************************/
-u8 ReadCardData(u8 addr, u8* data, u8* pSnr)
+u8 ReadCardData(u8 addr,u8 *data,u8 *pSnr)
 {
-	uint8_t pTagType[2] = { 0 }; //´æ¿¨µÄÀàÐÍÊý×é
+	uint8_t pTagType[2] = {0}; //´æ¿¨µÄÀàÐÍÊý×é
 	//1.Ñ°¿¨
-	if (PcdRequest(PICC_REQIDL, pTagType) != MI_OK)
+	if(PcdRequest(PICC_REQIDL,pTagType)!=MI_OK)
 	{
-		return 1;
+		 return 1;
 	}
 	//2.·À³åÍ»
-	if (PcdAnticoll(pSnr) != MI_OK)
+	if(PcdAnticoll(pSnr)!=MI_OK)
 	{
 		return 2;
 	}
 	//3.Ñ¡¿¨
-	if (PcdSelect(pSnr) != MI_OK)
+	if(PcdSelect(pSnr)!=MI_OK)
 	{
 		return 3;
 	}
 	Voice_SendCmd(0x2e);//ÓïÒô²¥±¨"àÖ"
 	//4.ÃÜÂëÑéÖ¤
-	if (PcdAuthState(PICC_AUTHENT1A, (addr / 4) * 4 + 3, picc_passward, pSnr) != MI_OK)
+	if(PcdAuthState(PICC_AUTHENT1A,(addr/4)*4+3,picc_passward,pSnr)!=MI_OK)
 	{
 		printf("±È¶ÔÃÜÂëÊ§°Ü\r\n");
 		PcdHalt();//ÐÝÃß
 		return 4;
 	}
 	//5.Ð´Êý¾Ý
-	if (PcdRead(addr, data) != MI_OK)
+	if(PcdRead(addr,data)!=MI_OK)
 	{
 		printf("¶ÁÊý¾ÝÊ§°Ü\r\n");
 		PcdHalt();//ÐÝÃß
@@ -256,13 +254,13 @@ u8 ReadCardData(u8 addr, u8* data, u8* pSnr)
 	}
 	PcdHalt();//ÐÝÃß
 	printf("¶ÁÈ¡Êý¾Ý£º\r\n");
-	for (u8 i = 0; i < 16; i++)
+	for(u8 i=0;i<16;i++)
 	{
-		printf("0x%02x  ", *(data + i));
+		printf("0x%02x  ",*(data+i));
 	}
 	printf("\r\n");
-	printf("×Ö·û´®ÐÎÊ½£º%s\r\n", data);
-
+	printf("×Ö·û´®ÐÎÊ½£º%s\r\n",data);
+	
 	return MI_OK;
 }
 
@@ -274,13 +272,13 @@ u8 ReadCardData(u8 addr, u8* data, u8* pSnr)
 u8 ReadRawRC(u8 Address)
 {
 	u8 ucAddr;
-	u8 ucResult = 0;
+	u8 ucResult=0;
 	RFID_CS_L;
 	/*RC522ÊÖ²á¶ÁÐ´µØÖ·¹æÔòÎªµÚÆßÎ»MSBÎª1ÔòÎª¶Á,MSBÎª0ÔòÎªÐ´,¼´µØÖ·ÊÇ´ÓµÚ1Î»¿ªÊ¼µÄ,µÚ0Î»ÐèÎ»0,ÔòÐ´µØÖ·ucAddr = ((Address<<1)&0x7E);¶ÁµØÖ·ucAddr = ((Address<<1)&0x7E)|0x80;*/
-	ucAddr = ((Address << 1) & 0x7E) | 0x80;
+	ucAddr = ((Address<<1)&0x7E)|0x80;
 
 	SPI3_Transfer(ucAddr);      //·¢ËÍ²Ù×÷
-	ucResult = SPI3_Transfer(0);  //½ÓÊÕ
+	ucResult=SPI3_Transfer(0);  //½ÓÊÕ
 	RFID_CS_H;
 	return ucResult;
 }
@@ -288,13 +286,13 @@ u8 ReadRawRC(u8 Address)
 //Ð´RC632¼Ä´æÆ÷
 //Address[IN]:¼Ä´æÆ÷µØÖ·
 //value[IN]:Ð´ÈëµÄÖµ
-void WriteRawRC(uint8_t Address, uint8_t value)
-{
-	uint8_t ucAddr;
+void WriteRawRC(uint8_t Address,uint8_t value)
+{  
+    uint8_t ucAddr;
 
 	RFID_CS_L;
-
-	ucAddr = ((Address << 1) & 0x7E);//0111 1110
+		
+    ucAddr = ((Address<<1)&0x7E);//0111 1110
 
 	SPI3_Transfer(ucAddr);
 	SPI3_Transfer(value);
@@ -302,21 +300,21 @@ void WriteRawRC(uint8_t Address, uint8_t value)
 }
 
 //Çå¼Ä´æÆ÷Î»
-void ClearBitMask(u8 reg, u8 mask)// 0000 1000
+void ClearBitMask(u8 reg,u8 mask)// 0000 1000
 {
-	char tmp = 0x0;
-	tmp = ReadRawRC(reg);
-	WriteRawRC(reg, tmp & ~mask);  // clear bit mask
-}
+    char tmp = 0x0;
+    tmp = ReadRawRC(reg);
+    WriteRawRC(reg, tmp & ~mask);  // clear bit mask
+} 
 
 //ÖÃRC522¼Ä´æÆ÷Î»
 //reg[IN]:¼Ä´æÆ÷µØÖ·
 //mask[IN]:ÖÃÎ»Öµ
-void SetBitMask(u8 reg, u8 mask)
+void SetBitMask(u8 reg,u8 mask)  
 {
-	char   tmp = 0x0;
-	tmp = ReadRawRC(reg);
-	WriteRawRC(reg, tmp | mask);  // set bit mask
+    char   tmp = 0x0;
+    tmp = ReadRawRC(reg);
+    WriteRawRC(reg,tmp | mask);  // set bit mask
 }
 
 /***************************************************
@@ -328,29 +326,29 @@ void SetBitMask(u8 reg, u8 mask)
 ***************************************************/
 char PcdReset(void)
 {
-	//Òý½Å¸´Î»
+    //Òý½Å¸´Î»
 	RFID_RST_H;
 	delay_ms(2);
-
+	
 	RFID_RST_L;
 	delay_ms(2);
-
+	
 	RFID_RST_H;
 	delay_ms(2);
-
+	
 	//Èí¼þ¸´Î»
-	WriteRawRC(CommandReg, PCD_RESETPHASE);
-	WriteRawRC(CommandReg, PCD_RESETPHASE);
+	WriteRawRC(CommandReg,PCD_RESETPHASE);
+	WriteRawRC(CommandReg,PCD_RESETPHASE);
 	delay_ms(2);
-
-	WriteRawRC(ModeReg, 0x3D);            //ºÍMifare¿¨Í¨Ñ¶£¬CRC³õÊ¼Öµ0x6363
-	WriteRawRC(TReloadRegL, 30);
-	WriteRawRC(TReloadRegH, 0);
-	WriteRawRC(TModeReg, 0x8D);
-	WriteRawRC(TPrescalerReg, 0x3E);
-	WriteRawRC(TxAutoReg, 0x40);          //±ØÐëÒª  
-
-	return MI_OK;
+    
+	WriteRawRC(ModeReg,0x3D);            //ºÍMifare¿¨Í¨Ñ¶£¬CRC³õÊ¼Öµ0x6363
+	WriteRawRC(TReloadRegL,30);           
+	WriteRawRC(TReloadRegH,0);
+	WriteRawRC(TModeReg,0x8D);
+	WriteRawRC(TPrescalerReg,0x3E);
+	WriteRawRC(TxAutoReg,0x40);          //±ØÐëÒª  
+   
+   return MI_OK;
 }
 
 //¹Ø±ÕÌìÏß
@@ -362,12 +360,12 @@ void PcdAntennaOff(void)
 //¿ªÆôÌìÏß
 void PcdAntennaOn(void)
 {
-	u8   i;
-	i = ReadRawRC(TxControlReg);
-	if (!(i & 0x03))
-	{
-		SetBitMask(TxControlReg, 0x03);
-	}
+    u8   i;
+    i = ReadRawRC(TxControlReg);
+    if (!(i & 0x03))
+    {
+        SetBitMask(TxControlReg, 0x03);
+    }
 }
 /***************************************************
 º¯ÊýÃû£ºM500PcdConfigISOType
@@ -378,22 +376,22 @@ void PcdAntennaOn(void)
 ***************************************************/
 char M500PcdConfigISOType(u8 type)  	//Ñ¡ÔñÍ¨ÐÅÐ­Òé
 {
-	if (type == 'A')                     //ISO14443_A
-	{
-		ClearBitMask(Status2Reg, 0x08);
-		WriteRawRC(ModeReg, 0x3D);//3F
-		WriteRawRC(RxSelReg, 0x86);//84
-		WriteRawRC(RFCfgReg, 0x7F);   //4F
-		WriteRawRC(TReloadRegL, 30);//tmoLength);// TReloadVal = 'h6a =tmoLength(dec) 
-		WriteRawRC(TReloadRegH, 0);
-		WriteRawRC(TModeReg, 0x8D);
-		WriteRawRC(TPrescalerReg, 0x3E);
-		delay_us(2);
-		PcdAntennaOn();
-	}
-	else { return 1; }
-
-	return MI_OK;
+   if (type == 'A')                     //ISO14443_A
+   { 
+			ClearBitMask(Status2Reg,0x08);
+			WriteRawRC(ModeReg,0x3D);//3F
+			WriteRawRC(RxSelReg,0x86);//84
+			WriteRawRC(RFCfgReg,0x7F);   //4F
+			WriteRawRC(TReloadRegL,30);//tmoLength);// TReloadVal = 'h6a =tmoLength(dec) 
+			WriteRawRC(TReloadRegH,0);
+			WriteRawRC(TModeReg,0x8D);
+			WriteRawRC(TPrescalerReg,0x3E);
+			delay_us(2);
+			PcdAntennaOn();
+   }
+   else{ return 1; }
+   
+   return MI_OK;
 }
 
 /***************************************************
@@ -407,98 +405,99 @@ char M500PcdConfigISOType(u8 type)  	//Ñ¡ÔñÍ¨ÐÅÐ­Òé
 ·µ»ØÖµ£ºchar
 ±¸  ×¢£º
 ***************************************************/
-char PcdComMF522(u8 Command, u8* pIn, u8 InLenByte, u8* pOut, u8* pOutLenBit)
+char PcdComMF522(u8 Command,u8 *pIn ,u8 InLenByte,u8 *pOut ,u8 *pOutLenBit)
 {
-	char   status = MI_ERR;
-	u8   irqEn = 0x00;
-	u8   waitFor = 0x00;
-	u8   lastBits;
-	u8   n;
-	u16   i;
-	switch (Command)
-	{
-	case PCD_AUTHENT:
-		irqEn = 0x12;
-		waitFor = 0x10;
-		break;
-	case PCD_TRANSCEIVE:
-		irqEn = 0x77;
-		waitFor = 0x30;
-		break;
-	default:	break;
+    char   status = MI_ERR;
+    u8   irqEn   = 0x00;
+    u8   waitFor = 0x00;
+    u8   lastBits;
+    u8   n;
+    u16   i;
+    switch(Command)
+    {
+        case PCD_AUTHENT:
+							irqEn   = 0x12;
+							waitFor = 0x10;
+							break;
+		case PCD_TRANSCEIVE:
+							irqEn   = 0x77;
+							waitFor = 0x30;
+							break;
+		default:	break;
+    }
+   
+    WriteRawRC(ComIEnReg,irqEn|0x80);
+    ClearBitMask(ComIrqReg,0x80);		//ÇåËùÓÐÖÐ¶ÏÎ»
+    WriteRawRC(CommandReg,PCD_IDLE);
+    SetBitMask(FIFOLevelReg,0x80);	 	//ÇåFIFO»º´æ
+    
+    for(i=0;i < InLenByte;i++)
+    {   
+		WriteRawRC(FIFODataReg, pIn [i]);    
 	}
-
-	WriteRawRC(ComIEnReg, irqEn | 0x80);
-	ClearBitMask(ComIrqReg, 0x80);		//ÇåËùÓÐÖÐ¶ÏÎ»
-	WriteRawRC(CommandReg, PCD_IDLE);
-	SetBitMask(FIFOLevelReg, 0x80);	 	//ÇåFIFO»º´æ
-
-	for (i = 0; i < InLenByte; i++)
-	{
-		WriteRawRC(FIFODataReg, pIn[i]);
-	}
-	WriteRawRC(CommandReg, Command);
-	//   	 n = ReadRawRC(CommandReg);
-
-	if (Command == PCD_TRANSCEIVE)
-	{
-		SetBitMask(BitFramingReg, 0x80);
+	WriteRawRC(CommandReg, Command);	  
+//   	 n = ReadRawRC(CommandReg);
+    
+    if (Command == PCD_TRANSCEIVE)
+    {    
+		SetBitMask(BitFramingReg,0x80);  
 	}	 //¿ªÊ¼´«ËÍ
-
+    										 
 	i = 600;//¸ù¾ÝÊ±ÖÓÆµÂÊµ÷Õû£¬²Ù×÷M1¿¨×î´óµÈ´ýÊ±¼ä25ms
-	// 	i = 100000;
-	do
-	{
-		n = ReadRawRC(ComIrqReg);
-		i--;
-	} while ((i != 0) && !(n & 0x01) && !(n & waitFor));
-	ClearBitMask(BitFramingReg, 0x80);
+// 	i = 100000;
+    do 
+    {
+        n = ReadRawRC(ComIrqReg);
+        i--;
+    }
+    while ((i!=0) && !(n&0x01) && !(n&waitFor));
+    ClearBitMask(BitFramingReg,0x80);
 
-	if (i != 0)
-	{
-		if (!(ReadRawRC(ErrorReg) & 0x1B))
-		{
-			status = MI_OK;
-			if (n & irqEn & 0x01)
-			{
-				status = MI_NOTAGERR;
+    if (i!=0)
+    {    
+        if(!(ReadRawRC(ErrorReg)&0x1B))
+        {
+            status = MI_OK;
+            if (n & irqEn & 0x01)
+            {   
+				status = MI_NOTAGERR;   
 			}
-			if (Command == PCD_TRANSCEIVE)
-			{
-				n = ReadRawRC(FIFOLevelReg);
-				lastBits = ReadRawRC(ControlReg) & 0x07;
-				if (lastBits)
-				{
-					*pOutLenBit = (n - 1) * 8 + lastBits;
+            if (Command == PCD_TRANSCEIVE)
+            {
+               	n = ReadRawRC(FIFOLevelReg);
+              	lastBits = ReadRawRC(ControlReg) & 0x07;
+                if (lastBits)
+                {   
+					*pOutLenBit = (n-1)*8 + lastBits;   
 				}
-				else
-				{
-					*pOutLenBit = n * 8;
+                else
+                {   
+					*pOutLenBit = n*8;   
 				}
-				if (n == 0)
-				{
+                if (n == 0)
+                {   
 					n = 1;
 				}
-				if (n > MAXRLEN)
-				{
-					n = MAXRLEN;
+                if (n > MAXRLEN)
+                {   
+					n = MAXRLEN;   
 				}
-				for (i = 0; i < n; i++)
-				{
-					pOut[i] = ReadRawRC(FIFODataReg);
+                for (i=0; i<n; i++)
+                {   
+					pOut [i] = ReadRawRC(FIFODataReg);    
 				}
-			}
+            }
+        }
+        else
+        {   
+			status = MI_ERR;   
 		}
-		else
-		{
-			status = MI_ERR;
-		}
-
-	}
-
-	SetBitMask(ControlReg, 0x80);           // stop timer now
-	WriteRawRC(CommandReg, PCD_IDLE);
-	return status;
+        
+    }
+   
+    SetBitMask(ControlReg,0x80);           // stop timer now
+    WriteRawRC(CommandReg,PCD_IDLE); 
+    return status;
 }
 
 /***************************************************
@@ -516,30 +515,30 @@ char PcdComMF522(u8 Command, u8* pIn, u8 InLenByte, u8* pOut, u8* pOutLenBit)
 					 0x0200 = Mifare_One(S70)
 					 0x0800 = Mifare_Pro(X)
 					 0x4403 = Mifare_DESFire
-
+					 
 ***************************************************/
-char PcdRequest(u8 req_code, u8* pTagType)
+char PcdRequest(u8 req_code,u8 *pTagType)
 {
-	char status;
+	char status;  
 	u8 unLen;
-	u8 ucComMF522Buf[MAXRLEN];
+	u8 ucComMF522Buf[MAXRLEN]; 
 
-	ClearBitMask(Status2Reg, 0x08);
-	WriteRawRC(BitFramingReg, 0x07);
-	SetBitMask(TxControlReg, 0x03);
-
+	ClearBitMask(Status2Reg,0x08);
+	WriteRawRC(BitFramingReg,0x07);
+	SetBitMask(TxControlReg,0x03);
+ 
 	ucComMF522Buf[0] = req_code;
 
-	status = PcdComMF522(PCD_TRANSCEIVE, ucComMF522Buf, 1, ucComMF522Buf, &unLen);
+	status = PcdComMF522(PCD_TRANSCEIVE,ucComMF522Buf,1,ucComMF522Buf,&unLen);
 
 	if ((status == MI_OK) && (unLen == 0x10))
-	{
-		*pTagType = ucComMF522Buf[0];
-		*(pTagType + 1) = ucComMF522Buf[1];
+	{    
+		*pTagType     = ucComMF522Buf[0];
+		*(pTagType+1) = ucComMF522Buf[1];
 	}
 	else
-	{
-		status = MI_ERR;
+	{   
+		status = MI_ERR;   
 	}
 	return status;
 }
@@ -551,67 +550,68 @@ char PcdRequest(u8 req_code, u8* pTagType)
 ·µ»ØÖµ£ºchar	 ³É¹¦·µ»ØMI_OK
 ±¸  ×¢£ºpSnr[OUT]:¿¨Æ¬ÐòÁÐºÅ£¬4×Ö½Ú
 ***************************************************/
-char PcdAnticoll(u8* pSnr)
+char PcdAnticoll(u8 *pSnr)
 {
-	char status;
-	u8 i, snr_check = 0;
-	u8 unLen;
-	u8 ucComMF522Buf[MAXRLEN];
+    char status;
+    u8 i,snr_check=0;
+    u8 unLen;
+    u8 ucComMF522Buf[MAXRLEN]; 
+    
+    ClearBitMask(Status2Reg,0x08);
+    WriteRawRC(BitFramingReg,0x00);
+    ClearBitMask(CollReg,0x80);
+ 
+    ucComMF522Buf[0] = PICC_ANTICOLL1;
+    ucComMF522Buf[1] = 0x20;
 
-	ClearBitMask(Status2Reg, 0x08);
-	WriteRawRC(BitFramingReg, 0x00);
-	ClearBitMask(CollReg, 0x80);
+    status = PcdComMF522(PCD_TRANSCEIVE,ucComMF522Buf,2,ucComMF522Buf,&unLen);
 
-	ucComMF522Buf[0] = PICC_ANTICOLL1;
-	ucComMF522Buf[1] = 0x20;
-
-	status = PcdComMF522(PCD_TRANSCEIVE, ucComMF522Buf, 2, ucComMF522Buf, &unLen);
-
-	if (status == MI_OK)
-	{
-		for (i = 0; i < 4; i++)
-		{
-			*(pSnr + i) = ucComMF522Buf[i];
-			snr_check ^= ucComMF522Buf[i];
-		}
-		if (snr_check != ucComMF522Buf[i])
-		{
-			status = MI_ERR;
-		}
-	}
-
-	SetBitMask(CollReg, 0x80);
-	return status;
+    if (status == MI_OK)
+    {
+    	 for (i=0; i<4; i++)
+         {   
+             *(pSnr+i)  = ucComMF522Buf[i];
+             snr_check ^= ucComMF522Buf[i];
+         }
+         if (snr_check != ucComMF522Buf[i])
+         {   
+			status = MI_ERR;    
+		 }
+    }
+    
+    SetBitMask(CollReg,0x80);
+    return status;
 }
 
 /*******************************************************************
 * º¯ÊýÃû£º     CalulateCRC()
 * ¹¦ÄÜÃèÊö £º  ÓÃMF522¼ÆËãCRC16º¯Êý
-* ×÷Õß£º         Ð»¹úÇä
-*²ÎÊýËµÃ÷:
-* ·µ»ØÖµËµÃ÷£º
+* ×÷Õß£º         Ð»¹úÇä 
+*²ÎÊýËµÃ÷: 
+* ·µ»ØÖµËµÃ÷£º 
 * ÐÞ¸Ä¼ÇÂ¼£º
 * ÆäËû£º
 *******************************************************************/
-void CalulateCRC(u8* pIn, u8 len, u8* pOut)
+void CalulateCRC(u8 *pIn,u8 len,u8 *pOut)
 {
-	u8 i, n;
-	ClearBitMask(DivIrqReg, 0x04);
-	WriteRawRC(CommandReg, PCD_IDLE);
-	SetBitMask(FIFOLevelReg, 0x80);
-	for (i = 0; i < len; i++)
-	{
-		WriteRawRC(FIFODataReg, *(pIn + i));
+    u8 i,n;
+    ClearBitMask(DivIrqReg,0x04);
+    WriteRawRC(CommandReg,PCD_IDLE);
+    SetBitMask(FIFOLevelReg,0x80);
+    for (i=0; i<len; i++)
+    {   
+		WriteRawRC(FIFODataReg,*(pIn +i));   
 	}
-	WriteRawRC(CommandReg, PCD_CALCCRC);
-	i = 0xFF;
-	do
-	{
-		n = ReadRawRC(DivIrqReg);
-		i--;
-	} while ((i != 0) && !(n & 0x04));
-	pOut[0] = ReadRawRC(CRCResultRegL);
-	pOut[1] = ReadRawRC(CRCResultRegM);
+    WriteRawRC(CommandReg,PCD_CALCCRC);
+    i = 0xFF;
+    do 
+    {
+        n = ReadRawRC(DivIrqReg);
+        i--;
+    }
+    while ((i!=0) && !(n&0x04));
+    pOut[0] = ReadRawRC(CRCResultRegL);
+    pOut[1] = ReadRawRC(CRCResultRegM);
 }
 
 /***************************************************
@@ -621,110 +621,110 @@ void CalulateCRC(u8* pIn, u8 len, u8* pOut)
 ·µ»ØÖµ£ºchar	³É¹¦·µ»ØMI_OK
 ±¸  ×¢£ºpSnr[IN]:¿¨Æ¬ÐòÁÐºÅ£¬4×Ö½Ú
 ***************************************************/
-char PcdSelect(u8* pSnr)
+char PcdSelect(u8 *pSnr)
 {
-	char status;
-	u8 i;
-	u8 unLen;
-	u8 ucComMF522Buf[MAXRLEN];
+    char status;
+    u8 i;
+    u8 unLen;
+    u8 ucComMF522Buf[MAXRLEN]; 
+    
+    ucComMF522Buf[0] = PICC_ANTICOLL1;
+    ucComMF522Buf[1] = 0x70;
+    ucComMF522Buf[6] = 0;
+    for (i=0; i<4; i++)
+    {
+    	ucComMF522Buf[i+2] = *(pSnr+i);
+    	ucComMF522Buf[6]  ^= *(pSnr+i);
+    }
+    CalulateCRC(ucComMF522Buf,7,&ucComMF522Buf[7]);
+  
+    ClearBitMask(Status2Reg,0x08);
 
-	ucComMF522Buf[0] = PICC_ANTICOLL1;
-	ucComMF522Buf[1] = 0x70;
-	ucComMF522Buf[6] = 0;
-	for (i = 0; i < 4; i++)
-	{
-		ucComMF522Buf[i + 2] = *(pSnr + i);
-		ucComMF522Buf[6] ^= *(pSnr + i);
+    status = PcdComMF522(PCD_TRANSCEIVE,ucComMF522Buf,9,ucComMF522Buf,&unLen);
+    
+    if ((status == MI_OK) && (unLen == 0x18))
+    {  
+		status = MI_OK;  
 	}
-	CalulateCRC(ucComMF522Buf, 7, &ucComMF522Buf[7]);
-
-	ClearBitMask(Status2Reg, 0x08);
-
-	status = PcdComMF522(PCD_TRANSCEIVE, ucComMF522Buf, 9, ucComMF522Buf, &unLen);
-
-	if ((status == MI_OK) && (unLen == 0x18))
-	{
-		status = MI_OK;
+    else
+    {
+		status = MI_ERR;    
 	}
-	else
-	{
-		status = MI_ERR;
-	}
-	return status;
+    return status;
 }
 
 /***************************************************
 º¯ÊýÃû£ºPcdAuthState
 ¹¦  ÄÜ£ºÑéÖ¤¿¨Æ¬ÃÜÂë
 ²Î  Êý£ºauth_mode[IN]: 	ÃÜÂëÑéÖ¤Ä£Ê½
-				 0x60 = ÑéÖ¤AÃÜÔ¿
-				 0x61 = ÑéÖ¤BÃÜÔ¿
+                 0x60 = ÑéÖ¤AÃÜÔ¿
+                 0x61 = ÑéÖ¤BÃÜÔ¿ 
 		addr[IN]£º		¿éµØÖ·
 		pKey[IN]£º		ÃÜÂë
 		pSnr[IN]£º		¿¨Æ¬ÐòÁÐºÅ£¬4×Ö½Ú
 ·µ»ØÖµ£ºchar	³É¹¦·µ»ØMI_OK
 ±¸  ×¢£º
 ***************************************************/
-char PcdAuthState(u8 auth_mode, u8 addr, u8* pKey, u8* pSnr)
+char PcdAuthState(u8 auth_mode,u8 addr,u8 *pKey,u8 *pSnr)
 {
-	char status;
-	u8 unLen;
-	u8 ucComMF522Buf[MAXRLEN];
+    char status;
+    u8 unLen;
+	u8 ucComMF522Buf[MAXRLEN]; 
 
-	ucComMF522Buf[0] = auth_mode;
-	ucComMF522Buf[1] = addr;
-	memcpy(&ucComMF522Buf[2], pKey, 6);
-	memcpy(&ucComMF522Buf[8], pSnr, 4);
-
-	status = PcdComMF522(PCD_AUTHENT, ucComMF522Buf, 12, ucComMF522Buf, &unLen);
-	if ((status != MI_OK) || (!(ReadRawRC(Status2Reg) & 0x08)))
-	{
-		status = MI_ERR;
+    ucComMF522Buf[0] = auth_mode;
+    ucComMF522Buf[1] = addr;
+    memcpy(&ucComMF522Buf[2],pKey,6); 
+    memcpy(&ucComMF522Buf[8],pSnr,4); 
+    
+    status = PcdComMF522(PCD_AUTHENT,ucComMF522Buf,12,ucComMF522Buf,&unLen);
+    if((status != MI_OK) || (!(ReadRawRC(Status2Reg) & 0x08)))
+    {   
+		status = MI_ERR;   
 	}
-	return status;
+    return status;
 }
 
 /***************************************************
 º¯ÊýÃû£ºPcdWrite
 ¹¦  ÄÜ£ºÐ´Êý¾Ýµ½M1¿¨Ò»¿é
 ²Î  Êý£ºaddr[IN]£º	¿éµØÖ·
-		p[OUT]£º	¶Á³öµÄÊý¾Ý£¬16×Ö½Ú
+        p[OUT]£º	¶Á³öµÄÊý¾Ý£¬16×Ö½Ú
 ·µ»ØÖµ£ºchar	³É¹¦·µ»ØMI_OK
 ±¸  ×¢£º
 ***************************************************/
-char PcdWrite(u8 addr, u8* p)
+char PcdWrite(u8 addr,u8 *p)
 {
-	char status;
-	u8 unLen;
-	u8 i, ucComMF522Buf[MAXRLEN];
+    char status;
+    u8 unLen;
+    u8 i,ucComMF522Buf[MAXRLEN]; 
+    
+    ucComMF522Buf[0] = PICC_WRITE;
+    ucComMF522Buf[1] = addr;
+    CalulateCRC(ucComMF522Buf,2,&ucComMF522Buf[2]);
+ 
+    status = PcdComMF522(PCD_TRANSCEIVE,ucComMF522Buf,4,ucComMF522Buf,&unLen);
 
-	ucComMF522Buf[0] = PICC_WRITE;
-	ucComMF522Buf[1] = addr;
-	CalulateCRC(ucComMF522Buf, 2, &ucComMF522Buf[2]);
-
-	status = PcdComMF522(PCD_TRANSCEIVE, ucComMF522Buf, 4, ucComMF522Buf, &unLen);
-
-	if ((status != MI_OK) || (unLen != 4) || ((ucComMF522Buf[0] & 0x0F) != 0x0A))
-	{
-		status = MI_ERR;
+    if ((status != MI_OK) || (unLen != 4) || ((ucComMF522Buf[0] & 0x0F) != 0x0A))
+    {   
+		status = MI_ERR;   
 	}
+        
+    if (status == MI_OK)
+    {
+        //memcpy(ucComMF522Buf, p , 16);
+        for (i=0; i<16; i++)
+        {    
+        	ucComMF522Buf[i] = *(p +i);   
+        }
+        CalulateCRC(ucComMF522Buf,16,&ucComMF522Buf[16]);
 
-	if (status == MI_OK)
-	{
-		//memcpy(ucComMF522Buf, p , 16);
-		for (i = 0; i < 16; i++)
-		{
-			ucComMF522Buf[i] = *(p + i);
+        status = PcdComMF522(PCD_TRANSCEIVE,ucComMF522Buf,18,ucComMF522Buf,&unLen);
+        if ((status != MI_OK) || (unLen != 4) || ((ucComMF522Buf[0] & 0x0F) != 0x0A))
+        {   
+			status = MI_ERR;  
 		}
-		CalulateCRC(ucComMF522Buf, 16, &ucComMF522Buf[16]);
-
-		status = PcdComMF522(PCD_TRANSCEIVE, ucComMF522Buf, 18, ucComMF522Buf, &unLen);
-		if ((status != MI_OK) || (unLen != 4) || ((ucComMF522Buf[0] & 0x0F) != 0x0A))
-		{
-			status = MI_ERR;
-		}
-	}
-	return status;
+    }
+    return status;
 }
 
 /***************************************************
@@ -735,44 +735,45 @@ char PcdWrite(u8 addr, u8* p)
 ·µ»ØÖµ£ºchar	³É¹¦·µ»ØMI_OK
 ±¸  ×¢£º
 ***************************************************/
-char PcdRead(u8 addr, u8* p)
+char PcdRead(u8 addr,u8 *p)
 {
-	char status;
-	u8 unLen;
-	u8 i, ucComMF522Buf[MAXRLEN];
+    char status;
+    u8 unLen;
+    u8 i,ucComMF522Buf[MAXRLEN]; 
 
-	ucComMF522Buf[0] = PICC_READ;
-	ucComMF522Buf[1] = addr;
-	CalulateCRC(ucComMF522Buf, 2, &ucComMF522Buf[2]);
-
-	status = PcdComMF522(PCD_TRANSCEIVE, ucComMF522Buf, 4, ucComMF522Buf, &unLen);
-	if ((status == MI_OK) && (unLen == 0x90))
-		//   {   memcpy(p , ucComMF522Buf, 16);   }
-	{
-		for (i = 0; i < 16; i++)
-		{
-			*(p + i) = ucComMF522Buf[i];
+    ucComMF522Buf[0] = PICC_READ;
+    ucComMF522Buf[1] = addr;
+    CalulateCRC(ucComMF522Buf,2,&ucComMF522Buf[2]);
+   
+    status = PcdComMF522(PCD_TRANSCEIVE,ucComMF522Buf,4,ucComMF522Buf,&unLen);
+    if ((status == MI_OK) && (unLen == 0x90))
+ //   {   memcpy(p , ucComMF522Buf, 16);   }
+    {
+        for (i=0; i<16; i++)
+        {    
+			*(p +i) = ucComMF522Buf[i];   
 		}
+    }
+    else
+    {   
+		status = MI_ERR;   
 	}
-	else
-	{
-		status = MI_ERR;
-	}
-
-	return status;
+    
+    return status;
 }
+
 
 //¿¨Ë¯Ãßº¯Êý
 char PcdHalt(void)
 {
 	char status;
-	unsigned char unLen;
-	unsigned char ucComMF522Buf[MAXRLEN];
-	ucComMF522Buf[0] = PICC_HALT;
-	ucComMF522Buf[1] = 0;
-	CalulateCRC(ucComMF522Buf, 2, &ucComMF522Buf[2]);
-
-	status = PcdComMF522(PCD_TRANSCEIVE, ucComMF522Buf, 4, ucComMF522Buf, &unLen);
+	unsigned char unLen ;
+	unsigned char ucComMF522Buf [MAXRLEN];
+	ucComMF522Buf [ 0]= PICC_HALT;
+	ucComMF522Buf [1]= 0 ;
+	CalulateCRC ( ucComMF522Buf,2, &ucComMF522Buf[2]) ;
+	
+	status = PcdComMF522(PCD_TRANSCEIVE,ucComMF522Buf,4, ucComMF522Buf, &unLen ) ;
 	return MI_OK;
 }
 /*************************************************************************************************/

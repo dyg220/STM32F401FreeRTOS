@@ -127,6 +127,8 @@
     <ClInclude Include="HardWear\door.h" />
     <ClInclude Include="HardWear\key.h" />
     <ClInclude Include="HardWear\KEY\key.h" />
+    <ClInclude Include="HardWear\lcd.h" />
+    <ClInclude Include="HardWear\LCDfont.h" />
     <ClInclude Include="HardWear\led.h" />
     <ClInclude Include="HardWear\LED\led.h" />
     <ClInclude Include="HardWear\mg200.h" />
@@ -199,12 +201,14 @@
     <ClCompile Include="FreeRTOS\src\stream_buffer.c" />
     <ClCompile Include="FreeRTOS\src\tasks.c" />
     <ClCompile Include="FreeRTOS\src\timers.c" />
+    <ClCompile Include="HardWear\1.c" />
     <ClCompile Include="HardWear\at24c02.c" />
     <ClCompile Include="HardWear\cy8cmbr3116.c" />
     <ClCompile Include="HardWear\DCMotor\dc_motor.c" />
     <ClCompile Include="HardWear\door.c" />
     <ClCompile Include="HardWear\key.c" />
     <ClCompile Include="HardWear\KEY\key.c" />
+    <ClCompile Include="HardWear\lcd.c" />
     <ClCompile Include="HardWear\led.c" />
     <ClCompile Include="HardWear\LED\led.c" />
     <ClCompile Include="HardWear\mg200.c" />

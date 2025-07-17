@@ -697,6 +697,11 @@
               <FileType>1</FileType>
               <FilePath>..\HardWear\cy8cmbr3116.c</FilePath>
             </File>
+            <File>
+              <FileName>lcd.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\HardWear\lcd.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

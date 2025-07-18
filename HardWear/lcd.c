@@ -10,16 +10,16 @@
 *******************************************************/
 void LCD_Pin_Init(void)
 {
-	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOB,ENABLE);
-	
-	GPIO_InitTypeDef GPIO_InitStruct = {0};
+	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOB, ENABLE);
+
+	GPIO_InitTypeDef GPIO_InitStruct = { 0 };
 	GPIO_InitStruct.GPIO_Mode = GPIO_Mode_OUT;
 	GPIO_InitStruct.GPIO_OType = GPIO_OType_PP;
-	GPIO_InitStruct.GPIO_Pin = GPIO_Pin_1|GPIO_Pin_10|GPIO_Pin_12|GPIO_Pin_14;
+	GPIO_InitStruct.GPIO_Pin = GPIO_Pin_1 | GPIO_Pin_10 | GPIO_Pin_12 | GPIO_Pin_14;
 	GPIO_InitStruct.GPIO_PuPd = GPIO_PuPd_NOPULL;
 	GPIO_InitStruct.GPIO_Speed = GPIO_Speed_25MHz;
-	GPIO_Init(GPIOB,&GPIO_InitStruct);
-	
+	GPIO_Init(GPIOB, &GPIO_InitStruct);
+
 	// 空闲状态
 	LCD_RESET_H;
 	LCD_CS_H;
@@ -94,18 +94,18 @@ void LCD_Init(void)
 {
 	LCD_Pin_Init();// 初始化GPIO
 	SPI2_Init();
-	
+
 	/* 复位ST7789VM驱动器 */
 	LCD_RESET_L;
 	delay_ms(100);
 	LCD_RESET_H;
 	delay_ms(100);
-	
-	/* start initial sequence */ 
+
+	/* start initial sequence */
 	LCD_Send_Cmd(0x36);
 	LCD_Send_Data8(0x00);
 
-	LCD_Send_Cmd(0x3A); 
+	LCD_Send_Cmd(0x3A);
 	LCD_Send_Data8(0x05);
 
 	LCD_Send_Cmd(0xB2);
@@ -113,10 +113,10 @@ void LCD_Init(void)
 	LCD_Send_Data8(0x0C);
 	LCD_Send_Data8(0x00);
 	LCD_Send_Data8(0x33);
-	LCD_Send_Data8(0x33); 
+	LCD_Send_Data8(0x33);
 
-	LCD_Send_Cmd(0xB7); 
-	LCD_Send_Data8(0x35);  
+	LCD_Send_Cmd(0xB7);
+	LCD_Send_Data8(0x35);
 
 	LCD_Send_Cmd(0xBB);
 	LCD_Send_Data8(0x19);
@@ -128,15 +128,15 @@ void LCD_Init(void)
 	LCD_Send_Data8(0x01);
 
 	LCD_Send_Cmd(0xC3);
-	LCD_Send_Data8(0x12);   
+	LCD_Send_Data8(0x12);
 
 	LCD_Send_Cmd(0xC4);
-	LCD_Send_Data8(0x20);  
+	LCD_Send_Data8(0x20);
 
-	LCD_Send_Cmd(0xC6); 
-	LCD_Send_Data8(0x0F);    
+	LCD_Send_Cmd(0xC6);
+	LCD_Send_Data8(0x0F);
 
-	LCD_Send_Cmd(0xD0); 
+	LCD_Send_Cmd(0xD0);
 	LCD_Send_Data8(0xA4);
 	LCD_Send_Data8(0xA1);
 
@@ -172,14 +172,14 @@ void LCD_Init(void)
 	LCD_Send_Data8(0x20);
 	LCD_Send_Data8(0x23);
 
-	LCD_Send_Cmd(0x21); 
-	LCD_Send_Cmd(0x11); 
-	LCD_Send_Cmd(0x29); 
-	
+	LCD_Send_Cmd(0x21);
+	LCD_Send_Cmd(0x11);
+	LCD_Send_Cmd(0x29);
+
 	LCD_LEDK_ON;	// 打开背光
-	
+
 	LCD_Clear(WHITE);
-} 
+}
 
 /******************************************************
 *函 数 名：LCD_Address_Set
@@ -190,13 +190,13 @@ void LCD_Init(void)
 *******************************************************/
 void LCD_Address_Set(u16 x1, u16 y1, u16 x2, u16 y2)
 {
-		LCD_Send_Cmd(0x2a);//列地址设置
-		LCD_Send_Data(x1);
-		LCD_Send_Data(x2);
-		LCD_Send_Cmd(0x2b);//行地址设置
-		LCD_Send_Data(y1);
-		LCD_Send_Data(y2);
-		LCD_Send_Cmd(0x2c);//颜色指令
+	LCD_Send_Cmd(0x2a);//列地址设置
+	LCD_Send_Data(x1);
+	LCD_Send_Data(x2);
+	LCD_Send_Cmd(0x2b);//行地址设置
+	LCD_Send_Data(y1);
+	LCD_Send_Data(y2);
+	LCD_Send_Cmd(0x2c);//颜色指令
 }
 
 /******************************************************
@@ -208,8 +208,8 @@ void LCD_Address_Set(u16 x1, u16 y1, u16 x2, u16 y2)
 *******************************************************/
 void LCD_Clear(u16 color)
 {
-	LCD_Address_Set(0,0,LCD_W-1,LCD_H-1);
-	for(u32 i = 0;i<LCD_W*LCD_H;i++)
+	LCD_Address_Set(0, 0, LCD_W - 1, LCD_H - 1);
+	for (u32 i = 0; i < LCD_W * LCD_H; i++)
 	{
 		LCD_Send_Data(color);
 	}
@@ -222,10 +222,10 @@ void LCD_Clear(u16 color)
 *返 回 值：None
 *备    注：
 *******************************************************/
-void LCD_ClearArea(u8 x0,u8 y0,u8 wide,u8 high,u16 color)
-{	
-	LCD_Address_Set(x0,y0,x0+wide-1,y0+high-1);
-	for(u32 i = 0;i<wide*high;i++)
+void LCD_ClearArea(u8 x0, u8 y0, u8 wide, u8 high, u16 color)
+{
+	LCD_Address_Set(x0, y0, x0 + wide - 1, y0 + high - 1);
+	for (u32 i = 0; i < wide * high; i++)
 	{
 		LCD_Send_Data(color);
 	}
@@ -239,9 +239,9 @@ void LCD_ClearArea(u8 x0,u8 y0,u8 wide,u8 high,u16 color)
 *返 回 值：None
 *备    注：
 *******************************************************/
-void LCD_Point(u16 x,u16 y,u16 color)
+void LCD_Point(u16 x, u16 y, u16 color)
 {
-	LCD_Address_Set(x,y,x,y);
+	LCD_Address_Set(x, y, x, y);
 	LCD_Send_Data(color);
 }
 
@@ -253,16 +253,16 @@ void LCD_Point(u16 x,u16 y,u16 color)
 *返 回 值：None
 *备    注：
 *******************************************************/
-void LCD_ShowChar8X16(uint16_t x0, uint16_t y0, const uint8_t *font, uint16_t color, uint16_t bgcolor)
+void LCD_ShowChar8X16(uint16_t x0, uint16_t y0, const uint8_t* font, uint16_t color, uint16_t bgcolor)
 {
-	u8 row = 0,col = 0;
+	u8 row = 0, col = 0;
 	u16 pcolor = 0;
-	for(row = 0;row<16;row++)//遍历行
+	for (row = 0; row < 16; row++)//遍历行
 	{
-		for(col=0;col<8;col++)//遍历列   
+		for (col = 0; col < 8; col++)//遍历列   
 		{
-			pcolor = (font[row]&(0x80>>col))?color:bgcolor;
-			LCD_Point(x0+col,y0+row,pcolor);
+			pcolor = (font[row] & (0x80 >> col)) ? color : bgcolor;
+			LCD_Point(x0 + col, y0 + row, pcolor);
 		}
 	}
 }
@@ -275,22 +275,22 @@ void LCD_ShowChar8X16(uint16_t x0, uint16_t y0, const uint8_t *font, uint16_t co
 *返 回 值：None
 *备    注：
 *******************************************************/
-void LCD_ShowChar16X32(uint16_t x0, uint16_t y0, const uint8_t *font, uint16_t color, uint16_t bgcolor)
+void LCD_ShowChar16X32(uint16_t x0, uint16_t y0, const uint8_t* font, uint16_t color, uint16_t bgcolor)
 {
-	u8 row = 0,col = 0;
+	u8 row = 0, col = 0;
 	u16 pcolor = 0;
-	u8 highbyte = 0,lowbyte = 0;
-	for(row = 0;row<32;row++)//遍历行
+	u8 highbyte = 0, lowbyte = 0;
+	for (row = 0; row < 32; row++)//遍历行
 	{
-		highbyte = font[2*row];
-		lowbyte = font[2*row+1];
-		for(col=0;col<16;col++)//遍历列   
+		highbyte = font[2 * row];
+		lowbyte = font[2 * row + 1];
+		for (col = 0; col < 16; col++)//遍历列   
 		{
-			if(col<8)//判断高字节
-				pcolor = (highbyte&(0x80>>col))?color:bgcolor;
+			if (col < 8)//判断高字节
+				pcolor = (highbyte & (0x80 >> col)) ? color : bgcolor;
 			else//判断低字节
-				pcolor = (lowbyte&(0x80>>(col-8)))?color:bgcolor;
-			LCD_Point(x0+col,y0+row,pcolor);
+				pcolor = (lowbyte & (0x80 >> (col - 8))) ? color : bgcolor;
+			LCD_Point(x0 + col, y0 + row, pcolor);
 		}
 	}
 }

@@ -60,18 +60,36 @@ u8 USART1_RecvByte(void)
 
 USART_INFO USART1_Recv = { 0 };
 
+extern u8 zk_flag;
 //中断服务函数
 void USART1_IRQHandler(void)
 {
+	u8 data = 0;
+	static u32 zk_addr = 0x020000;//字库起始地址
+	static u32 zk_cont = 0;
 	u8 clear = 0;
 	//接受中断
 	if (USART_GetITStatus(USART1, USART_IT_RXNE) == SET)
 	{
 		USART_ClearITPendingBit(USART1, USART_IT_RXNE);//清除中断标志位
+		data = USART_ReceiveData(USART1);
 		if (USART1_Recv.index < Max_Size - 1)//防止溢出
 		{
-			USART1_Recv.data[USART1_Recv.index] = USART_ReceiveData(USART1);
+			USART1_Recv.data[USART1_Recv.index] = data;
 			USART1_Recv.index++;
+		}
+		if (zk_flag == 1)
+		{
+			W25Q64_Write_Page(zk_addr, 1, &data);
+			zk_addr++;
+			LEDB_ON;
+			zk_cont++;
+			if (zk_cont == 0x00141F58)
+			{
+				LEDB_OFF;
+				printf("字库烧录完成\r\n");
+				zk_flag = 0;
+			}
 		}
 	}
 	//空闲中断
@@ -126,18 +144,8 @@ void _ttywrch(int ch)
 //重定义fputc函数 
 int fputc(int ch, FILE* f)
 {
-	int USART_PRINTF_FLAG = 1;//默认串口1
-	if (USART_PRINTF_FLAG == 1)
-	{
-		while (USART_GetFlagStatus(USART1, USART_FLAG_TC) == RESET);
-		USART_SendData(USART1, ch);
-	}
-	else
-	{
-		while (USART_GetFlagStatus(USART2, USART_FLAG_TC) == RESET);
-		USART_SendData(USART2, (uint8_t)ch);
-	}
-
+	while (USART_GetFlagStatus(USART1, USART_FLAG_TC) == RESET);
+	USART_SendData(USART1, ch);
 	return ch;
 }
 

@@ -4,10 +4,12 @@
 #include "stm32f4xx.h"                  // Device header
 #include "stdio.h"
 #include "string.h"
+#include "w25q64.h"
+#include "led.h"
 
 #define Max_Size   256
 
-typedef struct {
+typedef struct{
 	u8 data[Max_Size];
 	u16 index;
 	u8 flag;

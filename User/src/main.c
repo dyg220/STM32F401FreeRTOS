@@ -1,7 +1,7 @@
 #include "main.h"
 
 
-u8 Key_PassWord[8]={'1','2','3','4'};
+u8 Key_PassWord[8] = { '1','2','3','4' };
 
 
 int main(void)
@@ -22,11 +22,11 @@ int main(void)
 	Voice_Init();
 	Voice_SendCmd(0xef);
 	printf("Reset!\r\n");
-	
-//	LCD_ShowImage(0,0,240,240,gImage_pic);
-	LCD_ShowString_FromFlash(0,0,RED,WHITE,LCD_32X32,"Hello!¹þ¹þ");
+
+	//LCD_ShowImage(0,0,240,240,gImage_pic);
+	LCD_ShowString_FromFlash(0, 0, RED, WHITE, LCD_32X32, "Hello!¹þ¹þ");
 	AppStartTask();//ÈÎÎñ
-	
+
 	return 0;
 }
 

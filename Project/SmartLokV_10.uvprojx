@@ -702,6 +702,11 @@
               <FileType>1</FileType>
               <FilePath>..\HardWear\lcd.c</FilePath>
             </File>
+            <File>
+              <FileName>w25q64.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\HardWear\w25q64.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

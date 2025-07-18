@@ -134,6 +134,7 @@
     <ClInclude Include="HardWear\mg200.h" />
     <ClInclude Include="HardWear\rfid.h" />
     <ClInclude Include="HardWear\voice.h" />
+    <ClInclude Include="HardWear\w25q64.h" />
     <ClInclude Include="Library\STM32F4xx_StdPeriph_Driver\inc\misc.h" />
     <ClInclude Include="Library\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_adc.h" />
     <ClInclude Include="Library\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_can.h" />
@@ -214,6 +215,7 @@
     <ClCompile Include="HardWear\mg200.c" />
     <ClCompile Include="HardWear\rfid.c" />
     <ClCompile Include="HardWear\voice.c" />
+    <ClCompile Include="HardWear\w25q64.c" />
     <ClCompile Include="Library\STM32F4xx_StdPeriph_Driver\src\misc.c" />
     <ClCompile Include="Library\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_adc.c" />
     <ClCompile Include="Library\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_can.c" />

@@ -4,6 +4,10 @@
 #include "stm32f4xx.h"                  // Device header
 
 
+/***********SPI1*********/
+void SPI1_Init(void);
+u8 SPI1_Transfer(u8 Data);
+
 /***********SPI2*********/
 void SPI2_Init(void);
 u8 SPI2_Transfer(u8 Data);

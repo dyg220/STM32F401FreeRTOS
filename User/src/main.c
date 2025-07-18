@@ -26,7 +26,7 @@ int main(void)
 	LCD_Init();
 	Voice_Init();
 	Voice_SendCmd(0xef);
-	LCD_ShowChar16X32(20, 20, DATA_A, RED, WHITE);
+	LCD_ShowChar16X32(20, 20, 'A', RED, WHITE);
 	printf("Reset!\r\n");
 
 

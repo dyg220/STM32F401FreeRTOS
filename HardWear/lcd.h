@@ -5,8 +5,13 @@
 #include "spi.h"
 #include "systick.h"
 
-extern const unsigned char gImage_1[115200];
+extern const unsigned char gImage_pic[115200];
 extern const unsigned char ASCII_16X32[][64];
+extern const unsigned char ASCII_8X16[][16];
+
+#define LCD_16X16 	0
+#define LCD_32X32 	1
+
 //#define USE_HORIZONTAL 0  //设置横屏或者竖屏显示 0或1为竖屏 2或3为横屏
 
 #define LCD_W 240
@@ -28,8 +33,21 @@ extern const unsigned char ASCII_16X32[][64];
 
 void LCD_Init(void);
 void LCD_Clear(u16 color);
-void LCD_ShowChar8X16(uint16_t x0, uint16_t y0, const uint8_t *font, uint16_t color, uint16_t bgcolor);
-void LCD_ShowChar16X32(uint16_t x0, uint16_t y0, const uint8_t *font, uint16_t color, uint16_t bgcolor);
+//void LCD_ShowChar8X16(uint16_t x0, uint16_t y0, const uint8_t *font, uint16_t color, uint16_t bgcolor);
+void LCD_ShowChar8X16(uint16_t x0, uint16_t y0, char font, uint16_t color, uint16_t bgcolor);
+//void LCD_ShowChar16X32(uint16_t x0, uint16_t y0, const uint8_t *font, uint16_t color, uint16_t bgcolor);
+
+void LCD_ShowChar16X32(uint16_t x0, uint16_t y0, char font, uint16_t color, uint16_t bgcolor);
+void LCD_ShowString16X32(uint16_t x0, uint16_t y0, char* str, uint16_t color, uint16_t bgcolor);
+
+u8 LCD_ShowChinese16X16(uint16_t x0, uint16_t y0, const char* ch, uint16_t color, uint16_t bgcolor);
+void LCD_ShowChinese16X16s(uint16_t x0, uint16_t y0, const char* str, uint16_t color, uint16_t bgcolor);
+
+u8 LCD_ShowChinese32X32(uint16_t x0, uint16_t y0, const char* ch, uint16_t color, uint16_t bgcolor);
+void LCD_ShowChinese32X32s(uint16_t x0, uint16_t y0, const char* str, uint16_t color, uint16_t bgcolor);
+
+void LCD_ShowImage(uint16_t x0, uint16_t y0, u8 wide, u8 high, const uint8_t* image);
+void LCD_ShowSuperString(uint16_t x0, uint16_t y0, const char* str, uint16_t color, uint16_t bgcolor, uint8_t fontSize);
 
 //画笔颜色
 #define WHITE         	 0xFFFF
@@ -53,8 +71,6 @@ void LCD_ShowChar16X32(uint16_t x0, uint16_t y0, const uint8_t *font, uint16_t c
 #define LGRAY 			 0XC618 //浅灰色(PANNEL),窗体背景色
 #define LGRAYBLUE        0XA651 //浅灰蓝色(中间层颜色)
 #define LBBLUE           0X2B12 //浅棕蓝色(选择条目的反色)
-
-
 
 
 

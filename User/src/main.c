@@ -26,7 +26,7 @@ int main(void)
 	LCD_Init();
 	Voice_Init();
 	Voice_SendCmd(0xef);
-	LCD_ShowChar16X32(20, 20, 'A', RED, WHITE);
+	LCD_ShowSuperString(20, 20, "–≈”Ø¥Ô", RED, WHITE, 1);
 	printf("Reset!\r\n");
 
 

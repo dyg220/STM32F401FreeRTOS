@@ -4,6 +4,9 @@
 #include "stm32f4xx.h"                  // Device header
 #include "spi.h"
 #include "systick.h"
+#include "w25q64.h"
+
+
 
 extern const unsigned char gImage_pic[115200];
 extern const unsigned char ASCII_16X32[][64];
@@ -38,16 +41,22 @@ void LCD_ShowChar8X16(uint16_t x0, uint16_t y0, char font, uint16_t color, uint1
 //void LCD_ShowChar16X32(uint16_t x0, uint16_t y0, const uint8_t *font, uint16_t color, uint16_t bgcolor);
 
 void LCD_ShowChar16X32(uint16_t x0, uint16_t y0, char font, uint16_t color, uint16_t bgcolor);
-void LCD_ShowString16X32(uint16_t x0, uint16_t y0, char* str, uint16_t color, uint16_t bgcolor);
+void LCD_ShowString16X32(uint16_t x0, uint16_t y0, char *str, uint16_t color, uint16_t bgcolor);
 
-u8 LCD_ShowChinese16X16(uint16_t x0, uint16_t y0, const char* ch, uint16_t color, uint16_t bgcolor);
-void LCD_ShowChinese16X16s(uint16_t x0, uint16_t y0, const char* str, uint16_t color, uint16_t bgcolor);
+u8 LCD_ShowChinese16X16(uint16_t x0, uint16_t y0, const char *ch, uint16_t color, uint16_t bgcolor);
+void LCD_ShowChinese16X16s(uint16_t x0, uint16_t y0, const char *str,uint16_t color, uint16_t bgcolor);
 
-u8 LCD_ShowChinese32X32(uint16_t x0, uint16_t y0, const char* ch, uint16_t color, uint16_t bgcolor);
-void LCD_ShowChinese32X32s(uint16_t x0, uint16_t y0, const char* str, uint16_t color, uint16_t bgcolor);
+u8 LCD_ShowChinese32X32(uint16_t x0, uint16_t y0, const char *ch, uint16_t color, uint16_t bgcolor);
+void LCD_ShowChinese32X32s(uint16_t x0, uint16_t y0, const char *str,uint16_t color, uint16_t bgcolor);
 
-void LCD_ShowImage(uint16_t x0, uint16_t y0, u8 wide, u8 high, const uint8_t* image);
-void LCD_ShowSuperString(uint16_t x0, uint16_t y0, const char* str, uint16_t color, uint16_t bgcolor, uint8_t fontSize);
+void LCD_ShowImage(uint16_t x0, uint16_t y0,u8 wide, u8 high, const uint8_t *image);
+void LCD_ShowSuperString(uint16_t x0, uint16_t y0, const char *str, uint16_t color, uint16_t bgcolor, uint8_t fontSize);
+
+/******************************************支持字库*********************************************/
+void LCD_ShowChar_FromFlash(uint16_t x0, uint16_t y0, uint16_t color, uint16_t bgcolor, uint8_t fontSize, char ch);
+u8 LCD_ShowChinese_FromFlash(uint16_t x0, uint16_t y0, uint16_t color, uint16_t bgcolor, uint8_t fontSize, const char *ch);
+void LCD_ShowString_FromFlash(uint16_t x0, uint16_t y0, uint16_t color,uint16_t bgcolor, uint8_t fontSize, const char *str);
+/******************************************支持字库*********************************************/
 
 //画笔颜色
 #define WHITE         	 0xFFFF

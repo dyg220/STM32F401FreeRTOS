@@ -10,16 +10,16 @@
 *******************************************************/
 void LCD_Pin_Init(void)
 {
-	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOB, ENABLE);
-
-	GPIO_InitTypeDef GPIO_InitStruct = { 0 };
+	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOB,ENABLE);
+	
+	GPIO_InitTypeDef GPIO_InitStruct = {0};
 	GPIO_InitStruct.GPIO_Mode = GPIO_Mode_OUT;
 	GPIO_InitStruct.GPIO_OType = GPIO_OType_PP;
-	GPIO_InitStruct.GPIO_Pin = GPIO_Pin_1 | GPIO_Pin_10 | GPIO_Pin_12 | GPIO_Pin_14;
+	GPIO_InitStruct.GPIO_Pin = GPIO_Pin_1|GPIO_Pin_10|GPIO_Pin_12|GPIO_Pin_14;
 	GPIO_InitStruct.GPIO_PuPd = GPIO_PuPd_NOPULL;
 	GPIO_InitStruct.GPIO_Speed = GPIO_Speed_25MHz;
-	GPIO_Init(GPIOB, &GPIO_InitStruct);
-
+	GPIO_Init(GPIOB,&GPIO_InitStruct);
+	
 	// 空闲状态
 	LCD_RESET_H;
 	LCD_CS_H;
@@ -94,18 +94,18 @@ void LCD_Init(void)
 {
 	LCD_Pin_Init();// 初始化GPIO
 	SPI2_Init();
-
+	
 	/* 复位ST7789VM驱动器 */
 	LCD_RESET_L;
 	delay_ms(100);
 	LCD_RESET_H;
 	delay_ms(100);
-
-	/* start initial sequence */
+	
+	/* start initial sequence */ 
 	LCD_Send_Cmd(0x36);
 	LCD_Send_Data8(0x00);
 
-	LCD_Send_Cmd(0x3A);
+	LCD_Send_Cmd(0x3A); 
 	LCD_Send_Data8(0x05);
 
 	LCD_Send_Cmd(0xB2);
@@ -113,10 +113,10 @@ void LCD_Init(void)
 	LCD_Send_Data8(0x0C);
 	LCD_Send_Data8(0x00);
 	LCD_Send_Data8(0x33);
-	LCD_Send_Data8(0x33);
+	LCD_Send_Data8(0x33); 
 
-	LCD_Send_Cmd(0xB7);
-	LCD_Send_Data8(0x35);
+	LCD_Send_Cmd(0xB7); 
+	LCD_Send_Data8(0x35);  
 
 	LCD_Send_Cmd(0xBB);
 	LCD_Send_Data8(0x19);
@@ -128,15 +128,15 @@ void LCD_Init(void)
 	LCD_Send_Data8(0x01);
 
 	LCD_Send_Cmd(0xC3);
-	LCD_Send_Data8(0x12);
+	LCD_Send_Data8(0x12);   
 
 	LCD_Send_Cmd(0xC4);
-	LCD_Send_Data8(0x20);
+	LCD_Send_Data8(0x20);  
 
-	LCD_Send_Cmd(0xC6);
-	LCD_Send_Data8(0x0F);
+	LCD_Send_Cmd(0xC6); 
+	LCD_Send_Data8(0x0F);    
 
-	LCD_Send_Cmd(0xD0);
+	LCD_Send_Cmd(0xD0); 
 	LCD_Send_Data8(0xA4);
 	LCD_Send_Data8(0xA1);
 
@@ -172,12 +172,12 @@ void LCD_Init(void)
 	LCD_Send_Data8(0x20);
 	LCD_Send_Data8(0x23);
 
-	LCD_Send_Cmd(0x21);
-	LCD_Send_Cmd(0x11);
-	LCD_Send_Cmd(0x29);
-
+	LCD_Send_Cmd(0x21); 
+	LCD_Send_Cmd(0x11); 
+	LCD_Send_Cmd(0x29); 
+	
 	LCD_LEDK_ON;	// 打开背光
-
+	
 	LCD_Clear(WHITE);
 }
 
@@ -190,13 +190,13 @@ void LCD_Init(void)
 *******************************************************/
 void LCD_Address_Set(u16 x1, u16 y1, u16 x2, u16 y2)
 {
-	LCD_Send_Cmd(0x2a);//列地址设置
-	LCD_Send_Data(x1);
-	LCD_Send_Data(x2);
-	LCD_Send_Cmd(0x2b);//行地址设置
-	LCD_Send_Data(y1);
-	LCD_Send_Data(y2);
-	LCD_Send_Cmd(0x2c);//颜色指令
+		LCD_Send_Cmd(0x2a);//列地址设置
+		LCD_Send_Data(x1);
+		LCD_Send_Data(x2);
+		LCD_Send_Cmd(0x2b);//行地址设置
+		LCD_Send_Data(y1);
+		LCD_Send_Data(y2);
+		LCD_Send_Cmd(0x2c);//颜色指令
 }
 
 /******************************************************
@@ -208,8 +208,8 @@ void LCD_Address_Set(u16 x1, u16 y1, u16 x2, u16 y2)
 *******************************************************/
 void LCD_Clear(u16 color)
 {
-	LCD_Address_Set(0, 0, LCD_W - 1, LCD_H - 1);
-	for (u32 i = 0; i < LCD_W * LCD_H; i++)
+	LCD_Address_Set(0,0,LCD_W-1,LCD_H-1);
+	for(u32 i = 0;i<LCD_W*LCD_H;i++)
 	{
 		LCD_Send_Data(color);
 	}
@@ -222,10 +222,10 @@ void LCD_Clear(u16 color)
 *返 回 值：None
 *备    注：
 *******************************************************/
-void LCD_ClearArea(u8 x0, u8 y0, u8 wide, u8 high, u16 color)
-{
-	LCD_Address_Set(x0, y0, x0 + wide - 1, y0 + high - 1);
-	for (u32 i = 0; i < wide * high; i++)
+void LCD_ClearArea(u8 x0,u8 y0,u8 wide,u8 high,u16 color)
+{	
+	LCD_Address_Set(x0,y0,x0+wide-1,y0+high-1);
+	for(u32 i = 0;i<wide*high;i++)
 	{
 		LCD_Send_Data(color);
 	}
@@ -241,9 +241,9 @@ void LCD_ClearArea(u8 x0, u8 y0, u8 wide, u8 high, u16 color)
 *返 回 值：None
 *备    注：
 *******************************************************/
-void LCD_Point(u16 x, u16 y, u16 color)
+void LCD_Point(u16 x,u16 y,u16 color)
 {
-	LCD_Address_Set(x, y, x, y);
+	LCD_Address_Set(x,y,x,y);
 	LCD_Send_Data(color);
 }
 
@@ -268,6 +268,7 @@ void LCD_Point(u16 x, u16 y, u16 color)
 //		}
 //	}
 //}
+
 
 /****************************************直接填数组名**************************************************/
 /******************************************************
@@ -308,17 +309,18 @@ void LCD_Point(u16 x, u16 y, u16 color)
 *******************************************************/
 void LCD_ShowChar8X16(uint16_t x0, uint16_t y0, char font, uint16_t color, uint16_t bgcolor)
 {
-	u8 row = 0, col = 0;
+	u8 row = 0,col = 0;
 	u16 pcolor = 0;
-	for (row = 0; row < 16; row++)//遍历行
+	for(row = 0;row<16;row++)//遍历行
 	{
-		for (col = 0; col < 8; col++)//遍历列   
+		for(col=0;col<8;col++)//遍历列   
 		{
-			pcolor = (ASCII_8X16[font - ' '][row] & (0x80 >> col)) ? color : bgcolor;
-			LCD_Point(x0 + col, y0 + row, pcolor);
+			pcolor = (ASCII_8X16[font-' '][row]&(0x80>>col))?color:bgcolor;
+			LCD_Point(x0+col,y0+row,pcolor);
 		}
 	}
 }
+u8 data_a[] = {0x00,0x00,0x00,0x10,0x10,0x18,0x28,0x28,0x24,0x3C,0x44,0x42,0x42,0xE7,0x00,0x00,/*"A",0*/};
 
 
 /******************************************************
@@ -330,20 +332,20 @@ void LCD_ShowChar8X16(uint16_t x0, uint16_t y0, char font, uint16_t color, uint1
 *******************************************************/
 void LCD_ShowChar16X32(uint16_t x0, uint16_t y0, char font, uint16_t color, uint16_t bgcolor)
 {
-	u8 row = 0, col = 0;
+	u8 row = 0,col = 0;
 	u16 pcolor = 0;
-	u8 highbyte = 0, lowbyte = 0;
-	for (row = 0; row < 32; row++)//遍历行
+	u8 highbyte = 0,lowbyte = 0;
+	for(row = 0;row<32;row++)//遍历行
 	{
-		highbyte = ASCII_16X32[font - ' '][2 * row];
-		lowbyte = ASCII_16X32[font - ' '][2 * row + 1];
-		for (col = 0; col < 16; col++)//遍历列   
+		highbyte = ASCII_16X32[font-' '][2*row];
+		lowbyte = ASCII_16X32[font-' '][2*row+1];
+		for(col=0;col<16;col++)//遍历列   
 		{
-			if (col < 8)//判断高字节
-				pcolor = (highbyte & (0x80 >> col)) ? color : bgcolor;
+			if(col<8)//判断高字节
+				pcolor = (highbyte&(0x80>>col))?color:bgcolor;
 			else//判断低字节
-				pcolor = (lowbyte & (0x80 >> (col - 8))) ? color : bgcolor;
-			LCD_Point(x0 + col, y0 + row, pcolor);
+				pcolor = (lowbyte&(0x80>>(col-8)))?color:bgcolor;
+			LCD_Point(x0+col,y0+row,pcolor);
 		}
 	}
 }
@@ -355,27 +357,27 @@ void LCD_ShowChar16X32(uint16_t x0, uint16_t y0, char font, uint16_t color, uint
 *返 回 值：None
 *备    注：直接填字符
 *******************************************************/
-void LCD_ShowString16X32(uint16_t x0, uint16_t y0, char* str, uint16_t color, uint16_t bgcolor)
+void LCD_ShowString16X32(uint16_t x0, uint16_t y0, char *str, uint16_t color, uint16_t bgcolor)
 {
 	uint16_t x = x0;
-	uint16_t y = y0;
-
-	while (*str != '\0')
+    uint16_t y = y0;
+    
+    while(*str != '\0') 
 	{
-		// 只显示可打印ASCII字符（空格到波浪号）
-		if (*str >= ' ' && *str <= '~')
+        // 只显示可打印ASCII字符（空格到波浪号）
+        if(*str >= ' ' && *str <= '~') 
 		{
-			LCD_ShowChar16X32(x, y, *str, color, bgcolor);
-			x += 16;  // 每个字符宽度16像素
-
-			// 检查是否需要换行
-			if (x > LCD_W - 16) {
-				x = 0;
-				y += 32;  // 32像素高度 + 行间距
-			}
-		}
-		str++;  // 移动到下一个字符
-	}
+            LCD_ShowChar16X32(x, y, *str, color, bgcolor);
+            x += 16;  // 每个字符宽度16像素
+            
+            // 检查是否需要换行
+            if(x > LCD_W - 16) {
+                x = 0;
+                y += 32;  // 32像素高度 + 行间距
+            }
+        }
+        str++;  // 移动到下一个字符
+    }
 }
 
 /******************************************************
@@ -385,12 +387,12 @@ void LCD_ShowString16X32(uint16_t x0, uint16_t y0, char* str, uint16_t color, ui
 *返 回 值：None
 *备    注：
 *******************************************************/
-void LCD_ShowImage(uint16_t x0, uint16_t y0, u8 wide, u8 high, const uint8_t* image)
+void LCD_ShowImage(uint16_t x0, uint16_t y0,u8 wide, u8 high, const uint8_t *image)
 {
-	LCD_Address_Set(x0, y0, x0 + wide - 1, y0 + high - 1);//确定显示位置
-	for (u32 i = 0; i < wide * high; i++)
+	LCD_Address_Set(x0,y0,x0+wide-1,y0+high-1);//确定显示位置
+	for(u32 i = 0;i<wide*high;i++)
 	{
-		LCD_Send_Data((image[2 * i] << 8) | image[2 * i + 1]);
+		LCD_Send_Data((image[2*i]<<8)|image[2*i+1]);
 	}
 }
 
@@ -402,33 +404,33 @@ void LCD_ShowImage(uint16_t x0, uint16_t y0, u8 wide, u8 high, const uint8_t* im
 *返 回 值：None
 *备    注：
 *******************************************************/
-u8 LCD_ShowChinese16X16(uint16_t x0, uint16_t y0, const char* ch, uint16_t color, uint16_t bgcolor)
+u8 LCD_ShowChinese16X16(uint16_t x0, uint16_t y0, const char *ch, uint16_t color, uint16_t bgcolor)
 {
 	u16 pcolor = 0;
 	// 在HZ数组中查找汉字
-	for (uint8_t i = 0; i < sizeof(HZ16X16) / sizeof(HZ16X16[0]); i++)
+    for(uint8_t i = 0; i < sizeof(HZ16X16)/sizeof(HZ16X16[0]); i++) //几个汉字就遍历多少次
 	{
-		// 比较汉字编码（GBK编码前2字节）
-		if (ch[0] == HZ16X16[i][0] && ch[1] == HZ16X16[i][1])
+        // 比较汉字编码（GBK编码前2字节）
+        if(ch[0] == HZ16X16[i][0] && ch[1] == HZ16X16[i][1]) 			
 		{
-			const uint8_t* font = Chinese16X16[i]; // 获取传入字模数据
-			for (uint8_t row = 0; row < 16; row++)
+            const uint8_t *font = Chinese16X16[i]; // 获取传入字模数据
+            for(uint8_t row = 0; row < 16; row++) 
 			{
-				uint8_t highByte = font[row * 2];
-				uint8_t lowByte = font[row * 2 + 1];
-
-				for (uint8_t col = 0; col < 16; col++)//遍历列   
+                uint8_t highByte = font[row * 2];
+                uint8_t lowByte = font[row * 2 + 1];
+                
+				for(uint8_t col=0;col<16;col++)//遍历列   
 				{
-					if (col < 8)//判断高字节
-						pcolor = (highByte & (0x80 >> col)) ? color : bgcolor;
+					if(col<8)//判断高字节
+						pcolor = (highByte&(0x80>>col))?color:bgcolor;
 					else//判断低字节
-						pcolor = (lowByte & (0x80 >> (col - 8))) ? color : bgcolor;
-					LCD_Point(x0 + col, y0 + row, pcolor);
+						pcolor = (lowByte&(0x80>>(col-8)))?color:bgcolor;
+					LCD_Point(x0+col,y0+row,pcolor);
 				}
-			}
+            }
 			return 1;//成功显示
-		}
-	}
+        }
+    }
 	return 0;//显示失败
 }
 
@@ -439,24 +441,24 @@ u8 LCD_ShowChinese16X16(uint16_t x0, uint16_t y0, const char* ch, uint16_t color
 *返 回 值：None
 *备    注：
 *******************************************************/
-void LCD_ShowChinese16X16s(uint16_t x0, uint16_t y0, const char* str, uint16_t color, uint16_t bgcolor)
+void LCD_ShowChinese16X16s(uint16_t x0, uint16_t y0, const char *str,uint16_t color, uint16_t bgcolor)
 {
-	uint16_t x = x0;
-	uint16_t y = y0;
-	for (uint8_t i = 0; str[i] != '\0' && str[i + 1] != '\0'; i += 2)
-	{
-		// 显示当前汉字
-		if (LCD_ShowChinese16X16(x, y, &str[i], color, bgcolor))
-		{
-			x += 16; // 每个汉字宽16像素
-			// 检查是否需要换行
-			if (x > LCD_W - 16)
-			{
-				x = 0;
-				y += 16;
-			}
-		}
-	}
+    uint16_t x = x0;
+    uint16_t y = y0;    
+    for(uint8_t i = 0; str[i] != '\0' && str[i+1] != '\0'; i += 2) 
+    {
+        // 显示当前汉字
+        if(LCD_ShowChinese16X16(x, y, &str[i], color, bgcolor)) 
+        {
+            x += 16; // 每个汉字宽16像素
+            // 检查是否需要换行
+            if(x > LCD_W - 16) 
+            {
+                x = 0;
+                y += 16;
+            }
+        }
+    }
 }
 
 
@@ -467,44 +469,44 @@ void LCD_ShowChinese16X16s(uint16_t x0, uint16_t y0, const char* str, uint16_t c
 *返 回 值：None
 *备    注：
 *******************************************************/
-u8 LCD_ShowChinese32X32(uint16_t x0, uint16_t y0, const char* ch, uint16_t color, uint16_t bgcolor)
+u8 LCD_ShowChinese32X32(uint16_t x0, uint16_t y0, const char *ch, uint16_t color, uint16_t bgcolor)
 {
-	u16 pcolor = 0;
-
-	// 在HZ数组中查找汉字
-	for (uint8_t i = 0; i < sizeof(HZ32X32) / sizeof(HZ32X32[0]); i++)
-	{
-		// 比较汉字编码（GBK编码前2字节）
-		if (ch[0] == HZ32X32[i][0] && ch[1] == HZ32X32[i][1])
-		{
-			const uint8_t* font = Chinese32X32[i]; // 获取字模数据
-
-			for (uint8_t row = 0; row < 32; row++)
-			{
-				// 每行4字节数据（32位）
-				uint8_t byte1 = font[row * 4];     // 第1字节（前8列）
-				uint8_t byte2 = font[row * 4 + 1]; // 第2字节（8-15列）
-				uint8_t byte3 = font[row * 4 + 2]; // 第3字节（16-23列）
-				uint8_t byte4 = font[row * 4 + 3]; // 第4字节（24-31列）
-
-				for (uint8_t col = 0; col < 32; col++)
-				{
-					// 根据列位置选择对应的字节
-					if (col < 8)
-						pcolor = (byte1 & (0x80 >> col)) ? color : bgcolor;
-					else if (col < 16)
-						pcolor = (byte2 & (0x80 >> (col - 8))) ? color : bgcolor;
-					else if (col < 24)
-						pcolor = (byte3 & (0x80 >> (col - 16))) ? color : bgcolor;
-					else
-						pcolor = (byte4 & (0x80 >> (col - 24))) ? color : bgcolor;
-					LCD_Point(x0 + col, y0 + row, pcolor);
-				}
-			}
-			return 1; // 成功显示
-		}
-	}
-	return 0; // 未找到对应汉字
+	 u16 pcolor = 0;
+    
+    // 在HZ数组中查找汉字
+    for(uint8_t i = 0; i < sizeof(HZ32X32)/sizeof(HZ32X32[0]); i++) 
+    {
+        // 比较汉字编码（GBK编码前2字节）
+        if(ch[0] == HZ32X32[i][0] && ch[1] == HZ32X32[i][1]) 
+        {
+            const uint8_t *font = Chinese32X32[i]; // 获取字模数据
+            
+            for(uint8_t row = 0; row < 32; row++) 
+            {
+                // 每行4字节数据（32位）
+                uint8_t byte1 = font[row * 4];     // 第1字节（前8列）
+                uint8_t byte2 = font[row * 4 + 1]; // 第2字节（8-15列）
+                uint8_t byte3 = font[row * 4 + 2]; // 第3字节（16-23列）
+                uint8_t byte4 = font[row * 4 + 3]; // 第4字节（24-31列）
+                
+                for(uint8_t col = 0; col < 32; col++) 
+                {
+                    // 根据列位置选择对应的字节
+                    if(col < 8) 
+                        pcolor = (byte1 & (0x80 >> col)) ? color : bgcolor;
+                    else if(col < 16) 
+                        pcolor = (byte2 & (0x80 >> (col-8))) ? color : bgcolor;
+                    else if(col < 24) 
+                        pcolor = (byte3 & (0x80 >> (col-16))) ? color : bgcolor;
+                    else 
+                        pcolor = (byte4 & (0x80 >> (col-24))) ? color : bgcolor;                  
+                    LCD_Point(x0+col, y0+row, pcolor);
+                }
+            }
+            return 1; // 成功显示
+        }
+    }
+    return 0; // 未找到对应汉字
 }
 
 /******************************************************
@@ -514,24 +516,24 @@ u8 LCD_ShowChinese32X32(uint16_t x0, uint16_t y0, const char* ch, uint16_t color
 *返 回 值：None
 *备    注：
 *******************************************************/
-void LCD_ShowChinese32X32s(uint16_t x0, uint16_t y0, const char* str, uint16_t color, uint16_t bgcolor)
+void LCD_ShowChinese32X32s(uint16_t x0, uint16_t y0, const char *str,uint16_t color, uint16_t bgcolor)
 {
 	uint16_t x = x0;
-	uint16_t y = y0;
-	for (uint8_t i = 0; str[i] != '\0' && str[i + 1] != '\0'; i += 2)
-	{
-		// 显示当前汉字
-		if (LCD_ShowChinese32X32(x, y, &str[i], color, bgcolor))
-		{
-			x += 32; // 每个汉字宽16像素
-			// 检查是否需要换行
-			if (x > LCD_W - 32)
-			{
-				x = 0;
-				y += 32;
-			}
-		}
-	}
+    uint16_t y = y0;    
+    for(uint8_t i = 0; str[i] != '\0' && str[i+1] != '\0'; i += 2) 
+    {
+        // 显示当前汉字
+        if(LCD_ShowChinese32X32(x, y, &str[i], color, bgcolor)) 
+        {
+            x += 32; // 每个汉字宽16像素
+            // 检查是否需要换行
+            if(x > LCD_W - 32) 
+            {
+                x = 0;
+                y += 32;
+            }
+        }
+    }
 }
 
 /******************************************************
@@ -541,69 +543,221 @@ void LCD_ShowChinese32X32s(uint16_t x0, uint16_t y0, const char* str, uint16_t c
 *返 回 值：None
 *备    注：
 *******************************************************/
-void LCD_ShowSuperString(uint16_t x0, uint16_t y0, const char* str, uint16_t color, uint16_t bgcolor, uint8_t fontSize)
+void LCD_ShowSuperString(uint16_t x0, uint16_t y0, const char *str, uint16_t color, uint16_t bgcolor, uint8_t fontSize)
 {
-	uint16_t x = x0;
-	uint16_t y = y0;
-	uint8_t charWidth, charHeight, asciiWidth;
-
-	// 设置字体尺寸参数
-	if (fontSize == LCD_16X16) {
-		charWidth = 16;    // 中文字符宽度
-		charHeight = 16;   // 字符高度
-		asciiWidth = 8;    // ASCII字符宽度
-	}
-	else {  // LCD_32X32
-		charWidth = 32;
-		charHeight = 32;
-		asciiWidth = 16;
-	}
-
-	uint16_t lcdWidthLimit = LCD_W - charWidth;
-
-	while (*str != '\0') {
-		// 判断字符类型 (GBK中文最高位为1)
-		if ((*str & 0x80) != 0) {
-			// 处理中文字符(GBK)
-			if (*(str + 1) != '\0') {
-				if (fontSize == LCD_16X16) {
-					if (LCD_ShowChinese16X16(x, y, str, color, bgcolor)) {
-						x += charWidth;
-					}
-				}
-				else {
-					if (LCD_ShowChinese32X32(x, y, str, color, bgcolor)) {
-						x += charWidth;
-					}
-				}
-				str += 2;  // 跳过GBK编码的2字节
-			}
-			else {
-				str++;  // 不完整的编码，跳过
-			}
-		}
-		else {
-			// 处理ASCII字符
-			if (*str >= ' ' && *str <= '~') {
-				if (fontSize == LCD_16X16) {
-					LCD_ShowChar8X16(x, y, *str, color, bgcolor);
-					x += asciiWidth;
-				}
-				else {
-					LCD_ShowChar16X32(x, y, *str, color, bgcolor);
-					x += asciiWidth;
-				}
-			}
-			str++;
-		}
-
-		// 检查是否需要换行
-		if (x > lcdWidthLimit) {
-			x = 0;
-			y += charHeight;
-		}
-	}
+     uint16_t x = x0;
+    uint16_t y = y0;
+    uint8_t charWidth, charHeight, asciiWidth;
+    
+    // 设置字体尺寸参数
+    if(fontSize == LCD_16X16) {
+        charWidth = 16;    // 中文字符宽度
+        charHeight = 16;   // 字符高度
+        asciiWidth = 8;    // ASCII字符宽度
+    } else {  // LCD_32X32
+        charWidth = 32;
+        charHeight = 32;
+        asciiWidth = 16;
+    }
+    
+    uint16_t lcdWidthLimit = LCD_W - charWidth;
+    
+    while(*str != '\0') {
+        // 判断字符类型 (GBK中文最高位为1)
+        if((*str & 0x80) != 0) {
+            // 处理中文字符(GBK)
+            if(*(str+1) != '\0') {
+                if(fontSize == LCD_16X16) {
+                    if(LCD_ShowChinese16X16(x, y, str, color, bgcolor)) {
+                        x += charWidth;
+                    }
+                } else {
+                    if(LCD_ShowChinese32X32(x, y, str, color, bgcolor)) {
+                        x += charWidth;
+                    }
+                }
+                str += 2;  // 跳过GBK编码的2字节
+            } else {
+                str++;  // 不完整的编码，跳过
+            }
+        } else {
+            // 处理ASCII字符
+            if(*str >= ' ' && *str <= '~') {
+                if(fontSize == LCD_16X16) {
+                    LCD_ShowChar8X16(x, y, *str, color, bgcolor);
+                    x += asciiWidth;
+                } else {
+                    LCD_ShowChar16X32(x, y, *str, color, bgcolor);
+                    x += asciiWidth;
+                }
+            }
+            str++;
+        }
+        
+        // 检查是否需要换行
+        if(x > lcdWidthLimit) {
+            x = 0;
+            y += charHeight;
+        }
+    }
 }
+
+
+
+
+/************************************************************************支持字库*******************************************/
+/******************************************************
+* 函数名：LCD_ShowChar_FromFlash
+* 功能：从Flash读取并显示ASCII字符
+* 参数：
+*   x0, y0    - 起始坐标
+*   color      - 字体颜色
+*   bgcolor    - 背景颜色
+*   fontSize   - 字体大小(16/32)
+*   ch         - 要显示的字符
+* 备注：地址匹配您实际的字库烧录位置
+*******************************************************/
+void LCD_ShowChar_FromFlash(uint16_t x0, uint16_t y0, uint16_t color, uint16_t bgcolor, uint8_t fontSize, char ch)
+{
+    uint8_t fontBuff[64] = {0};
+    uint32_t addr = 0x020000; // 字库起始地址
+    
+    switch(fontSize) {
+        case LCD_16X16: 
+//            addr += 0x00000000 + (ch - ' ') * 16; // ASC16.bin偏移
+		    addr += 0x00000000 + ch * 16; // ASC16.bin偏移
+            W25Q64_Read_Bytes(addr, 16, fontBuff);
+            for(uint8_t row=0; row<16; row++) {
+                for(uint8_t col=0; col<8; col++) {
+                    uint16_t pColor = (fontBuff[row] & (0x80>>col)) ? color : bgcolor;
+                    LCD_Point(x0+col, y0+row, pColor);
+                }
+            }
+            break;
+            
+        case LCD_32X32: 
+//            addr += 0x00000806 + (ch - ' ') * 64; // ASC32.bin偏移(从0x020000+0x00000806开始)
+			addr += 0x00000806 + ch * 64;
+            W25Q64_Read_Bytes(addr, 64, fontBuff);
+            for(uint8_t row=0; row<32; row++) {
+                uint8_t highByte = fontBuff[2*row];
+                uint8_t lowByte = fontBuff[2*row+1];
+                for(uint8_t col=0; col<16; col++) {
+                    uint16_t pColor = (col<8) ? 
+                        ((highByte & (0x80>>col)) ? color : bgcolor) :
+                        ((lowByte & (0x80>>(col-8))) ? color : bgcolor);
+                    LCD_Point(x0+col, y0+row, pColor);
+                }
+            }
+            break;
+    }
+}
+
+/******************************************************
+* 函数名：LCD_ShowChinese_FromFlash
+* 功能：从Flash读取并显示汉字
+* 参数：
+*   x0, y0    - 起始坐标
+*   color      - 字体颜色
+*   bgcolor    - 背景颜色
+*   fontSize   - 字体大小(16/32)
+*   ch         - 要显示的汉字(GBK编码)
+* 返回值：1-成功 0-失败
+* 备注：地址匹配您实际的字库烧录位置
+*******************************************************/
+u8 LCD_ShowChinese_FromFlash(uint16_t x0, uint16_t y0, uint16_t color, uint16_t bgcolor, uint8_t fontSize, const char *ch)
+{
+    uint8_t fontBuff[128] = {0};
+    uint32_t addr = 0x020000; // 字库起始地址
+    
+    switch(fontSize) {
+        case LCD_16X16: 
+            addr += 0x0000280C + ((ch[0]-0xa1)*94 + (ch[1]-0xa1)) * 32; // HZK16.bin偏移
+            W25Q64_Read_Bytes(addr, 32, fontBuff);
+            for(uint8_t row=0; row<16; row++) {
+                uint8_t highByte = fontBuff[2*row];
+                uint8_t lowByte = fontBuff[2*row+1];
+                for(uint8_t col=0; col<16; col++) {
+                    uint16_t pColor = (col<8) ? 
+                        ((highByte & (0x80>>col)) ? color : bgcolor) :
+                        ((lowByte & (0x80>>(col-8))) ? color : bgcolor);
+                    LCD_Point(x0+col, y0+row, pColor);
+                }
+            }
+            return 1;
+            
+        case LCD_32X32: 
+            addr += 0x00042652 + ((ch[0]-0xa1)*94 + (ch[1]-0xa1)) * 128; // HZK32.bin偏移
+            W25Q64_Read_Bytes(addr, 128, fontBuff);
+            for(uint8_t row=0; row<32; row++) {
+                uint8_t byte1 = fontBuff[4*row];
+                uint8_t byte2 = fontBuff[4*row+1];
+                uint8_t byte3 = fontBuff[4*row+2];
+                uint8_t byte4 = fontBuff[4*row+3];
+                for(uint8_t col=0; col<32; col++) {
+                    uint16_t pColor;
+                    if(col < 8) pColor = (byte1 & (0x80>>col)) ? color : bgcolor;
+                    else if(col < 16) pColor = (byte2 & (0x80>>(col-8))) ? color : bgcolor;
+                    else if(col < 24) pColor = (byte3 & (0x80>>(col-16))) ? color : bgcolor;
+                    else pColor = (byte4 & (0x80>>(col-24))) ? color : bgcolor;
+                    LCD_Point(x0+col, y0+row, pColor);
+                }
+            }
+            return 1;
+    }
+    return 0;
+}
+
+/******************************************************
+* 函数名：LCD_ShowString_FromFlash
+* 功能：显示中英文混合字符串(从Flash字库读取)
+* 参数：
+*   x0, y0    - 起始坐标
+*   color      - 字体颜色
+*   bgcolor    - 背景颜色
+*   fontSize   - 字体大小(16/32)
+*   str        - 要显示的字符串(GBK编码中文+ASCII英文)
+*******************************************************/
+void LCD_ShowString_FromFlash(uint16_t x0, uint16_t y0, uint16_t color,uint16_t bgcolor, uint8_t fontSize, const char *str)
+{
+    uint16_t x = x0;
+    uint16_t y = y0;
+    uint8_t charWidth = (fontSize == LCD_16X16) ? 16 : 32;
+    uint8_t asciiWidth = (fontSize == LCD_16X16) ? 8 : 16;
+    
+    while(*str != '\0') {
+        if((*str & 0x80) != 0) { // 中文字符
+            if(*(str+1) != '\0') {
+                if(LCD_ShowChinese_FromFlash(x, y, color, bgcolor, fontSize, str)) {
+                    x += charWidth;
+                    str += 2;
+                }
+            } else {
+                str++;
+            }
+        } else { // ASCII字符
+            if(*str >= ' ' && *str <= '~') {
+                LCD_ShowChar_FromFlash(x, y, color, bgcolor, fontSize, *str);
+                x += asciiWidth;
+            }
+            str++;
+        }
+        
+        if(x > LCD_W - charWidth) {
+            x = 0;
+            y += charWidth;
+        }
+    }
+}
+
+
+
+
+
+
+
+
+
 
 
 
